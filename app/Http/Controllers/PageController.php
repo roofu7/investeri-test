@@ -13,7 +13,7 @@ class PageController extends Controller
     public function getPages(): Application|Factory|View|\Illuminate\Foundation\Application
     {
         $page = Page::all();
-        return view('layouts.main', compact('page'));
+        return view('navmenu', compact('page'));
 
     }
 }

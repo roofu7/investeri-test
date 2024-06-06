@@ -21,7 +21,7 @@
                     :log-out-route="route('logout')"
                 />
             @elseguest()
-                <a href=""><p>вход</p></a>
+                <a href="{{ route('login') }}"><p>вход</p></a>
                 <a href="{{ route('register') }}"><p>регистрация</p></a>
             @endauth()
         </x-slot:profile>
