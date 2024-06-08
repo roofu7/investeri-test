@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('company_contacts', function (Blueprint $table) {
             $table->id();
+
+            $table->string('email');
+            $table->integer('phone');
+            $table->foreignId('company_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
             $table->timestamps();
         });
     }
