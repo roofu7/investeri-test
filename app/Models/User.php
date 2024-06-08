@@ -54,6 +54,10 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(CompanyContact::class, Company::class);
     }
+    public function companyInvestProjects(): HasManyThrough
+    {
+        return $this->hasManyThrough(CompanyInvestProject::class, Company::class);
+    }
     public function companyActualLocations(): HasManyThrough
     {
         return $this->hasManyThrough(CompanyActualLocation::class, Company::class);
