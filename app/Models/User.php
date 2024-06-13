@@ -46,7 +46,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function companies(): HasMany
+    public function companyForm(): HasMany
     {
         return $this->hasMany(Company::class);
     }

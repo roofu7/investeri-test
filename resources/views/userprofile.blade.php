@@ -12,30 +12,25 @@
 <x-moonshine::layout>
 
     <x-moonshine::layout.flash/>
-
-    <x-moonshine::layout.side-bar :home_route="route('home')">
-
+    <x-moonshine::layout.sidebar
+            :home_route="route('home')">
         <x-moonshine::layout.menu>
-{{--            <x-moonshine::breadcrumbs--}}
-{{--                :items="[--}}
-{{--             '/' => 'Home',--}}
-{{--             '/articles' => 'Articles'--}}
-{{--                ]"--}}
-{{--            />--}}
-            <x-moonshine::layout.profile
-                route="/user_info"
-                :log-out-route="route('logout')">
-            </x-moonshine::layout.profile>
-        </x-moonshine::layout.menu>
 
-    </x-moonshine::layout.side-bar>
+        </x-moonshine::layout.menu>
+            <x-moonshine::layout.profile
+                    route="/profile"
+                    :log-out-route="route('logout')">
+            </x-moonshine::layout.profile>
+
+
+    </x-moonshine::layout.sidebar>
 
     <main class="layout-page">
         <x-moonshine::grid>
             <x-moonshine::column>
                 <x-moonshine::layout.header
-                    :notifications="false"
-                    :locales="false"
+                        :notifications="false"
+                        :locales="false"
                 />
                 <x-moonshine::layout.content/>
             </x-moonshine::column>

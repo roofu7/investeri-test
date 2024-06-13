@@ -14,6 +14,7 @@ class Company extends Model
         'inn',
         'ogrn',
         'name',
+        'user_id',
     ];
     public function user(): BelongsTo
     {

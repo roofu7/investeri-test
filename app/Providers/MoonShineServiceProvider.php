@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\UserAccountController;
+use App\MoonShine\Resources\CompanyContactResource;
 use App\MoonShine\Resources\PageResource;
+use App\MoonShine\Resources\UserCompanyResource;
 use App\MoonShine\Resources\UserProfileResource;
+use App\Pages\profiles\CompanyForm;
+use App\Pages\profiles\CompanyIndex;
 use App\Pages\UserProfilePage;
 use MoonShine\Providers\MoonShineApplicationServiceProvider;
 use MoonShine\MoonShine;
@@ -27,6 +33,8 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
     {
         return [
             new UserProfileResource(),
+            new CompanyContactResource(),
+            new UserCompanyResource(),
         ];
     }
 
@@ -37,6 +45,8 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
     {
         return [
             new UserProfilePage(),
+            new CompanyIndex(),
+            new CompanyForm(),
         ];
     }
 
@@ -56,9 +66,22 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
                     new MoonShineUserRoleResource()
                 ),
             ])->canSee(fn() => request()->routeIs('moonshine.*')),
+
             MenuGroup::make('Страницы', [
                 MenuItem::make('Создать страницу', new PageResource()),
             ])->canSee(fn() => request()->routeIs('moonshine.*')),
+
+            MenuGroup::make('Project', [
+                MenuItem::make('Создать project', fn() => route('home')),
+            ])->canSee(fn() => !request()->routeIs('moonshine.*')),
+
+//            MenuGroup::make('Test', [
+//                MenuItem::make('Создать test', new UserAccountController()),
+//            ])->canSee(fn() => !request()->routeIs('moonshine.*')),
+
+            MenuGroup::make('Юрлицо', [
+                MenuItem::make('Компания', fn() => route('companyinfo')),
+            ])->canSee(fn() => !request()->routeIs('moonshine.*')),
         ];
     }
 
