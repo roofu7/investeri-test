@@ -21,19 +21,21 @@ class CompanyFormController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+//        dd($request);
+//        $user = $request->user();
         $id = Auth::id();
-
         $validated = $request->validate([
-            'name' => 'required',
+//            '_token' => 'required|max:255',
+            'name' => 'required|max:255',
             'inn' => 'required|unique:companies|max:255',
             'ogrn' => 'required|unique:companies|max:255',
         ]);
-
+//        dd($validated);
         $collect = collect($validated);
         $merge = $collect->merge(['user_id' => $id]);
 
         Company::create($merge->toArray());
 
-        return redirect('profile/company');
+        return redirect(route('companyprofile'));
     }
 }

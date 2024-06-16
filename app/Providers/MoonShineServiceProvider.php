@@ -6,12 +6,14 @@ namespace App\Providers;
 
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\UserAccountController;
+use App\MoonShine\Resources\CompanyActualLocationResource;
 use App\MoonShine\Resources\CompanyContactResource;
 use App\MoonShine\Resources\PageResource;
 use App\MoonShine\Resources\UserCompanyResource;
 use App\MoonShine\Resources\UserProfileResource;
 use App\Pages\profiles\CompanyForm;
 use App\Pages\profiles\CompanyIndex;
+use App\Pages\profiles\CompanyProfile;
 use App\Pages\UserProfilePage;
 use MoonShine\Providers\MoonShineApplicationServiceProvider;
 use MoonShine\MoonShine;
@@ -35,6 +37,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             new UserProfileResource(),
             new CompanyContactResource(),
             new UserCompanyResource(),
+            new CompanyActualLocationResource()
         ];
     }
 
@@ -47,6 +50,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             new UserProfilePage(),
             new CompanyIndex(),
             new CompanyForm(),
+            new CompanyProfile(),
         ];
     }
 

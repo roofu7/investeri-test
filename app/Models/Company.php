@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Company extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'inn',
         'ogrn',

@@ -3,23 +3,33 @@
 namespace App\Pages\profiles;
 
 use App\Models\Company;
+use App\Models\CompanyActualLocation;
 use App\Models\CompanyContact;
+use App\Models\CompanyLegalLocation;
 use App\Models\User;
 use App\MoonShine\Resources\CompanyContactResource;
 use App\MoonShine\Resources\UserCompanyResource;
 use App\MoonShine\Resources\UserProfileResource;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+
 //use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use LaravelIdea\Helper\App\Models\_IH_User_C;
 use MoonShine\Components\FormBuilder;
 use MoonShine\Decorations\Block;
+use MoonShine\Decorations\Collapse;
+use MoonShine\Decorations\Column;
+use MoonShine\Decorations\Divider;
+use MoonShine\Decorations\Grid;
+use MoonShine\Decorations\LineBreak;
 use MoonShine\Fields\Hidden;
 use MoonShine\Fields\ID;
 
 //use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Relationships\BelongsTo;
+
 //use MoonShine\Fields\Relationships\HasManyThrough;
 use MoonShine\Fields\Text;
 use MoonShine\Pages\Page;
@@ -28,32 +38,155 @@ use MoonShine\Fields\Relationships\HasMany;
 
 class CompanyForm extends Page
 {
-//    protected ?User $item = null;
     protected string $layout = 'userprofile';
-    protected string $title = 'Компания';
-    /*public function fields(): array
+    protected ?Company $itemCompany = null;
+    protected ?CompanyContact $itemCompanyContact = null;
+
+    public function title(): string
+    {
+        return $this->title ?: 'CompanyForm';
+    }
+
+    protected function hasItemCompany(): bool
+    {
+        return request()->filled('id');
+    }
+
+    protected function getItemCompany(): Model
+    {
+        if (!is_null($this->itemCompany)) {
+            return $this->itemCompany;
+        }
+        return Company::query()->findOrFail(request('id'));
+    }
+
+    public function fieldsCompany(): array
     {
         return [
-            Block::make([
-                ID::make(),
-                Text::make('tttt')->required(),
-            ])
+            ID::make()->sortable()->showOnExport(),
+            Text::make('Название', 'name')->required()->showOnExport(),
+            Text::make('ИНН', 'inn')->required()->showOnExport(),
+            Text::make('ОГРН', 'ogrn')->required()->showOnExport(),
         ];
     }
 
-    protected function hasItem(): bool
+    /*
+     * Контакты компании
+    */
+    public function itemsCompanyContact()
     {
-        return request()->filled('_id');
+        $r = CompanyContact::all()->where('company_id', $this->getItemCompany()->id);
+        foreach ($r as $item) {
+            return ($item['id']);
+        }
+        return ([]);
     }
 
-    protected function getItem(): Model
+    protected function hasItemCompanyContact(): bool
     {
-//        return User::query()->where('id', auth()->id())->paginate();
-        if (!is_null($this->item)) {
-            return $this->item;
-            }
-        return User::query()->find(request()->input('_id'));
-    }*/
+        return CompanyContact::query()
+            ->where('company_id', $this->getItemCompany()->id)
+            ->exists();
+    }
+
+    protected function getItemCompanyContact(): Model
+    {
+        if (!is_null($this->itemCompanyContact)) {
+            return $this->itemCompanyContact;
+        }
+        return CompanyContact::query()->findOrFail($this->itemsCompanyContact());
+    }
+
+    public function fieldsCompanyContact(): array
+    {
+        return [
+            ID::make()->sortable()->showOnExport(),
+            Text::make('Электронная почта', 'email')->required()->showOnExport(),
+            Text::make('Телефон', 'phone')->required()->showOnExport(),
+        ];
+    }
+
+    /*
+     * Фактический адрес
+    */
+    public function itemsCompanyActualLocation()
+    {
+        $r = CompanyActualLocation::all()->where('company_id', $this->getItemCompany()->id);
+        foreach ($r as $item) {
+            return ($item['id']);
+        }
+        return ([]);
+    }
+
+    protected function hasItemCompanyActualLocation(): bool
+    {
+        return CompanyActualLocation::query()
+            ->where('company_id', $this->getItemCompany()->id)
+            ->exists();
+    }
+
+    protected function getItemCompanyActualLocation(): Model
+    {
+        if (!is_null($this->itemCompanyContact)) {
+            return $this->itemCompanyContact;
+        }
+        return CompanyActualLocation::query()->findOrFail($this->itemsCompanyActualLocation());
+    }
+
+
+    public function fieldsCompanyActualLocation(): array
+    {
+        return [
+            ID::make()->sortable()->showOnExport(),
+            Text::make('Регион', 'email')->showOnExport(),
+            Text::make('Город', 'phone')->showOnExport(),
+            Text::make('Улица', 'phone')->showOnExport(),
+            Text::make('Номер дома', 'phone')->showOnExport(),
+            Text::make('Корпус', 'phone')->showOnExport(),
+            Text::make('Номер комнаты', 'phone')->showOnExport(),
+        ];
+    }
+
+    /*
+     * Юридический адрес
+    */
+    public function itemsCompanyLegalLocation()
+    {
+        $r = CompanyLegalLocation::all()->where('company_id', $this->getItemCompany()->id);
+        foreach ($r as $item) {
+            return ($item['id']);
+        }
+        return ([]);
+    }
+
+    protected function hasItemCompanyLegalLocation(): bool
+    {
+        return CompanyLegalLocation::query()
+            ->where('company_id', $this->getItemCompany()->id)
+            ->exists();
+    }
+
+    protected function getItemCompanyLegalLocation(): Model
+    {
+        if (!is_null($this->itemCompanyContact)) {
+            return $this->itemCompanyContact;
+        }
+        return CompanyLegalLocation::query()->findOrFail($this->itemsCompanyLegalLocation());
+    }
+
+
+    public function fieldsCompanyLegalLocation(): array
+    {
+        return [
+            ID::make()->sortable()->showOnExport(),
+            Text::make('Регион', 'email')->showOnExport(),
+            Text::make('Город', 'phone')->showOnExport(),
+            Text::make('Улица', 'phone')->showOnExport(),
+            Text::make('Номер дома', 'phone')->showOnExport(),
+            Text::make('Корпус', 'phone')->showOnExport(),
+            Text::make('Номер комнаты', 'phone')->showOnExport(),
+        ];
+    }
 
     /**
      * @inheritDoc
@@ -61,21 +194,51 @@ class CompanyForm extends Page
 
     public function components(): array
     {
+        $dataCompany = $this->hasItemCompany() ? $this->getItemCompany() : new Company();
+        $dataCompanyContact = $this->hasItemCompanyContact() ? $this->getItemCompanyContact() : new CompanyContact();
+        $dataCompanyActualLocation = $this->hasItemCompanyActualLocation() ? $this->getItemCompanyActualLocation() : new CompanyActualLocation();
+        $dataCompanyLegalLocation = $this->hasItemCompanyLegalLocation() ? $this->getItemCompanyLegalLocation() : new CompanyLegalLocation();
+
         return [
-            FormBuilder::make(route('store'))
-                ->fields([
-//                    Hidden::make('user_id', 'user_id', formatted: fn() => User::query()->where('id', auth()->id())->paginate()),
-//                    BelongsTo::make('eee', 'user', resource: new UserProfileResource()),
-//                    HasMany::make('uuu', 'CompanyForm', resource: new UserCompanyResource())->getParentResource(),
-//                    Text::make('sss', 'user_id', fn() => User::query()->where('id', auth()->id()))->required(),
-//                    ID::make('uuu', 'user_id')->parent(),
-//                    Hidden::make('', 'id', formatted: fn() => Text::make('User', 'user_id'))->required(),
-//                    Auth::class(),
-                    Text::make('Название', 'name')->required(),
-                    Text::make('ИНН', 'inn')->required(),
-                    Text::make('ОГРН', 'ogrn')->required(),
-//                    Hidden::make('sss', 'user_id'),
-                ])//->FillCast(Company::query()->where('user_id', auth()->id()) ,ModelCast::make(Company::class))
+            Grid::make([
+                Column::make([
+                    Block::make('Профиль', [
+                        FormBuilder::make(route('companyprofilestore'))
+                            ->fields($this->fieldsCompany())
+                            ->FillCast($dataCompany, ModelCast::make(Company::class)),
+                    ]),
+                ])->columnSpan(6),
+                Column::make([
+                    Block::make('Контакты', [
+                        FormBuilder::make(route('companyprofilestore'))
+                            ->fields($this->fieldsCompanyContact())
+                            ->FillCast($dataCompanyContact, ModelCast::make(CompanyContact::class)),
+                    ]),
+                ])->columnSpan(6),
+            ]),
+
+            LineBreak::make(),
+            Divider::make(),
+            LineBreak::make(),
+            Collapse::make('Адрес', [
+                Grid::make([
+                    Column::make([
+                        Block::make('Юридический адрес', [
+                            FormBuilder::make(route('companyprofilestore'))
+                                ->fields($this->fieldsCompanyActualLocation())
+                                ->FillCast($dataCompanyLegalLocation, ModelCast::make(CompanyLegalLocation::class)),
+                        ]),
+                    ])->columnSpan(6),
+                    Column::make([
+                        Block::make('Фактический адрес', [
+                            FormBuilder::make(route('companyprofilestore'))
+                                ->fields($this->fieldsCompanyActualLocation())
+                                ->FillCast($dataCompanyActualLocation, ModelCast::make(CompanyActualLocation::class)),
+                        ]),
+                    ])->columnSpan(6),
+                ]),
+            ]),
+
         ];
     }
 }

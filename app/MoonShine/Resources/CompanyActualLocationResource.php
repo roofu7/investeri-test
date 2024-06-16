@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Company;
+use App\Models\CompanyActualLocation;
 
 use MoonShine\Resources\ModelResource;
 use MoonShine\Decorations\Block;
@@ -14,13 +14,13 @@ use MoonShine\Fields\Field;
 use MoonShine\Components\MoonShineComponent;
 
 /**
- * @extends ModelResource<Company>
+ * @extends ModelResource<CompanyActualLocation>
  */
-class UserCompanyResource extends ModelResource
+class CompanyActualLocationResource extends ModelResource
 {
-    protected string $model = Company::class;
-    protected string $column = 'name';
-    protected string $title = 'Мои компании';
+    protected string $model = CompanyActualLocation::class;
+
+    protected string $title = 'Юридический адрес';
 
     /**
      * @return list<MoonShineComponent|Field>
@@ -35,7 +35,7 @@ class UserCompanyResource extends ModelResource
     }
 
     /**
-     * @param Company $item
+     * @param CompanyActualLocation $item
      *
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
