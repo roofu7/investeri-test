@@ -4,27 +4,26 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\UserAccountController;
 use App\MoonShine\Resources\CompanyActualLocationResource;
 use App\MoonShine\Resources\CompanyContactResource;
+use App\MoonShine\Resources\MoonShineUserResource;
+use App\MoonShine\Resources\MoonShineUserRoleResource;
 use App\MoonShine\Resources\PageResource;
 use App\MoonShine\Resources\UserCompanyResource;
 use App\MoonShine\Resources\UserProfileResource;
-use App\Pages\profiles\CompanyForm;
-use App\Pages\profiles\CompanyIndex;
-use App\Pages\profiles\CompanyProfile;
+use App\Pages\profiles\companies\CompanyDetails;
+use App\Pages\profiles\companies\CompanyForm;
+use App\Pages\profiles\companies\CompanyIndex;
+use App\Pages\profiles\companies\CompanyProfile;
+use App\Pages\profiles\companies\CompanyProfileForm;
 use App\Pages\UserProfilePage;
-use MoonShine\Providers\MoonShineApplicationServiceProvider;
-use MoonShine\MoonShine;
-use MoonShine\Menu\MenuGroup;
-use MoonShine\Menu\MenuItem;
-use App\MoonShine\Resources\MoonShineUserResource;
-use App\MoonShine\Resources\MoonShineUserRoleResource;
+use Closure;
 use MoonShine\Contracts\Resources\ResourceContract;
 use MoonShine\Menu\MenuElement;
+use MoonShine\Menu\MenuGroup;
+use MoonShine\Menu\MenuItem;
 use MoonShine\Pages\Page;
-use Closure;
+use MoonShine\Providers\MoonShineApplicationServiceProvider;
 
 class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
 {
@@ -50,6 +49,8 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             new UserProfilePage(),
             new CompanyIndex(),
             new CompanyForm(),
+            new CompanyProfileForm(),
+            new CompanyDetails(),
             new CompanyProfile(),
         ];
     }
@@ -75,16 +76,16 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
                 MenuItem::make('Создать страницу', new PageResource()),
             ])->canSee(fn() => request()->routeIs('moonshine.*')),
 
-            MenuGroup::make('Project', [
-                MenuItem::make('Создать project', fn() => route('home')),
-            ])->canSee(fn() => !request()->routeIs('moonshine.*')),
+//            MenuGroup::make('Project', [
+//                MenuItem::make('Создать project', static fn() => route('home')),
+//            ])->canSee(fn() => !request()->routeIs('moonshine.*')),
 
 //            MenuGroup::make('Test', [
 //                MenuItem::make('Создать test', new UserAccountController()),
 //            ])->canSee(fn() => !request()->routeIs('moonshine.*')),
 
             MenuGroup::make('Юрлицо', [
-                MenuItem::make('Компания', fn() => route('companyinfo')),
+                MenuItem::make('Компания', fn () => route('company.index')),
             ])->canSee(fn() => !request()->routeIs('moonshine.*')),
         ];
     }

@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
+use App\Models\profiles\companies\Company;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Company;
-
-use MoonShine\Resources\ModelResource;
-use MoonShine\Decorations\Block;
-use MoonShine\Fields\ID;
-use MoonShine\Fields\Field;
 use MoonShine\Components\MoonShineComponent;
+use MoonShine\Decorations\Block;
+use MoonShine\Fields\Field;
+use MoonShine\Fields\ID;
+use MoonShine\Resources\ModelResource;
 
 /**
  * @extends ModelResource<Company>

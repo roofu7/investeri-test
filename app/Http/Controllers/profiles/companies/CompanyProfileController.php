@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\profiles\companies;
 
-use App\Models\Company;
-use App\Models\CompanyContact;
-use App\Models\User;
-use App\Pages\profiles\CompanyProfile;
+use App\Http\Controllers\Controller;
+use App\Models\profiles\companies\CompanyContact;
+use App\Pages\profiles\companies\CompanyProfile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CompanyProfileController extends Controller
 {
@@ -19,7 +17,7 @@ class CompanyProfileController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        dd($request);
+//        dd($request);
 //        $user = $request->user();
 //        $id = Auth::id();
 //        $users = User::find($id)->companyContacts;

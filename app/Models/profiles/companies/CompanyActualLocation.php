@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\profiles\companies;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CompanyLegalLocation extends Model
+class CompanyActualLocation extends Model
 {
     use HasFactory;
     protected $fillable = [

@@ -1,22 +1,14 @@
 <?php
 
-namespace App\Pages\profiles;
+declare(strict_types=1);
 
-use App\Models\Company;
-use App\Models\CompanyActualLocation;
-use App\Models\CompanyContact;
-use App\Models\CompanyLegalLocation;
-use App\Models\User;
-use App\MoonShine\Resources\CompanyContactResource;
-use App\MoonShine\Resources\UserCompanyResource;
-use App\MoonShine\Resources\UserProfileResource;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
+namespace App\Pages\profiles\companies;
+
+use App\Models\profiles\companies\Company;
+use App\Models\profiles\companies\CompanyActualLocation;
+use App\Models\profiles\companies\CompanyContact;
+use App\Models\profiles\companies\CompanyLegalLocation;
 use Illuminate\Database\Eloquent\Model;
-
-//use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Auth;
-use LaravelIdea\Helper\App\Models\_IH_User_C;
 use MoonShine\Components\FormBuilder;
 use MoonShine\Decorations\Block;
 use MoonShine\Decorations\Collapse;
@@ -24,23 +16,18 @@ use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Divider;
 use MoonShine\Decorations\Grid;
 use MoonShine\Decorations\LineBreak;
-use MoonShine\Fields\Hidden;
 use MoonShine\Fields\ID;
-
-//use MoonShine\Fields\Relationships\BelongsTo;
-use MoonShine\Fields\Relationships\BelongsTo;
-
-//use MoonShine\Fields\Relationships\HasManyThrough;
 use MoonShine\Fields\Text;
 use MoonShine\Pages\Page;
 use MoonShine\TypeCasts\ModelCast;
-use MoonShine\Fields\Relationships\HasMany;
 
-class CompanyForm extends Page
+class CompanyProfileForm extends Page
 {
     protected string $layout = 'userprofile';
     protected ?Company $itemCompany = null;
     protected ?CompanyContact $itemCompanyContact = null;
+    protected ?CompanyActualLocation $itemCompanyActualLocation = null;
+    protected ?CompanyLegalLocation $itemCompanyLegalLocation = null;
 
     public function title(): string
     {
@@ -127,8 +114,8 @@ class CompanyForm extends Page
 
     protected function getItemCompanyActualLocation(): Model
     {
-        if (!is_null($this->itemCompanyContact)) {
-            return $this->itemCompanyContact;
+        if (!is_null($this->itemCompanyActualLocation)) {
+            return $this->itemCompanyActualLocation;
         }
         return CompanyActualLocation::query()->findOrFail($this->itemsCompanyActualLocation());
     }
@@ -168,8 +155,8 @@ class CompanyForm extends Page
 
     protected function getItemCompanyLegalLocation(): Model
     {
-        if (!is_null($this->itemCompanyContact)) {
-            return $this->itemCompanyContact;
+        if (!is_null($this->itemCompanyLegalLocation)) {
+            return $this->itemCompanyLegalLocation;
         }
         return CompanyLegalLocation::query()->findOrFail($this->itemsCompanyLegalLocation());
     }
@@ -200,26 +187,29 @@ class CompanyForm extends Page
         $dataCompanyLegalLocation = $this->hasItemCompanyLegalLocation() ? $this->getItemCompanyLegalLocation() : new CompanyLegalLocation();
 
         return [
-            Grid::make([
-                Column::make([
-                    Block::make('Профиль', [
-                        FormBuilder::make(route('companyprofilestore'))
-                            ->fields($this->fieldsCompany())
-                            ->FillCast($dataCompany, ModelCast::make(Company::class)),
-                    ]),
-                ])->columnSpan(6),
-                Column::make([
-                    Block::make('Контакты', [
-                        FormBuilder::make(route('companyprofilestore'))
-                            ->fields($this->fieldsCompanyContact())
-                            ->FillCast($dataCompanyContact, ModelCast::make(CompanyContact::class)),
-                    ]),
-                ])->columnSpan(6),
+            Block::make([
+                Grid::make([
+                    Column::make([
+                        Block::make('Профиль', [
+                            FormBuilder::make(route('companyprofilestore'))
+                                ->fields($this->fieldsCompany())
+                                ->FillCast($dataCompany, ModelCast::make(Company::class)),
+                        ]),
+                    ])->columnSpan(6),
+                    Column::make([
+                        Block::make('Контакты', [
+                            FormBuilder::make(route('companyprofilestore'))
+                                ->fields($this->fieldsCompanyContact())
+                                ->FillCast($dataCompanyContact, ModelCast::make(CompanyContact::class)),
+                        ]),
+                    ])->columnSpan(6),
+                ]),
             ]),
 
             LineBreak::make(),
             Divider::make(),
             LineBreak::make(),
+
             Collapse::make('Адрес', [
                 Grid::make([
                     Column::make([

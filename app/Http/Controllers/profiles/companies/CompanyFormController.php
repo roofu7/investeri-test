@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\profiles\companies;
 
-use App\Models\Company;
-use App\Models\User;
-use App\Pages\profiles\CompanyForm;
-use App\Pages\profiles\CompanyIndex;
+use App\Http\Controllers\Controller;
+use App\Models\profiles\companies\Company;
+use App\Pages\profiles\companies\CompanyForm;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

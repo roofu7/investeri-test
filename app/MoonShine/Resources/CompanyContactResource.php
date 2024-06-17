@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
+use App\Models\profiles\companies\CompanyContact;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\CompanyContact;
-
-use MoonShine\Resources\ModelResource;
-use MoonShine\Decorations\Block;
-use MoonShine\Fields\ID;
-use MoonShine\Fields\Field;
 use MoonShine\Components\MoonShineComponent;
+use MoonShine\Decorations\Block;
+use MoonShine\Fields\Field;
+use MoonShine\Fields\ID;
+use MoonShine\Resources\ModelResource;
 
 /**
  * @extends ModelResource<CompanyContact>
@@ -35,7 +34,7 @@ class CompanyContactResource extends ModelResource
     }
 
     /**
-     * @param CompanyContact $item
+     * @param \App\Models\profiles\companies\CompanyContact $item
      *
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules

@@ -1,25 +1,21 @@
 <?php
 
-namespace App\Pages\profiles;
+declare(strict_types=1);
 
-use App\Http\Controllers\CompanyFormController;
-use App\Models\Company;
-use App\Models\CompanyContact;
+namespace App\Pages\profiles\companies;
+
+use App\Models\profiles\companies\Company;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use MoonShine\ActionButtons\ActionButton;
 use MoonShine\Components\TableBuilder;
-use MoonShine\Decorations\Block;
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Grid;
 use MoonShine\Decorations\LineBreak;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Text;
 use MoonShine\Pages\Page;
+use MoonShine\TypeCasts\ModelCast;
 
 //use MoonShine\Pages\Pages;
-use MoonShine\Pages\Pages;
-use MoonShine\TypeCasts\ModelCast;
 
 class CompanyIndex extends Page
 {
@@ -51,7 +47,7 @@ class CompanyIndex extends Page
     public function components(): array
     {
         return [
-            ActionButton::make('добавить компанию', route('companyprofile'))
+            ActionButton::make('добавить компанию', url: fn () => route('company.create', parameters: ['id' => auth()->id()]))
                 ->icon('heroicons.outline.plus')
                 ->primary(),
 
@@ -62,9 +58,9 @@ class CompanyIndex extends Page
                 ->fields($this->fields())
                 ->cast(ModelCast::make(Company::class))
                 ->buttons([
-                    ActionButton::make('заполнить данные', fn(Company $company) => route('create', parameters: ['id' => $company->getKey()]))
+                    ActionButton::make('заполнить данные', url: fn(Company $company) => route('company.store', parameters: ['id' => $company->getKey()]))
                         ->icon('heroicons.outline.pencil')->primary(),
-                    ActionButton::make('редактировать', fn(Company $company) => route('create', parameters: ['id' => $company->getKey()]))
+                    ActionButton::make('редактировать', url: fn(Company $company) => route('company.update', parameters: ['id' => $company->getKey()]))
                         ->icon('heroicons.outline.pencil'),
                 ]),
         ];

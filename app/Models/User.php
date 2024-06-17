@@ -3,6 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\profiles\companies\Company;
+use App\Models\profiles\companies\CompanyActualLocation;
+use App\Models\profiles\companies\CompanyContact;
+use App\Models\profiles\companies\CompanyInvestProject;
+use App\Models\profiles\companies\CompanyLegalLocation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
