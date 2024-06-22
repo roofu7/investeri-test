@@ -17,7 +17,8 @@
         <x-slot:profile>
             @auth()
                 <x-moonshine::layout.profile
-                    route="/profile"
+{{--                    action="{{ route('userinfo', parameters: ) }}"--}}
+                    route="/user"
                     :log-out-route="route('logout')"
                 />
             @elseguest()

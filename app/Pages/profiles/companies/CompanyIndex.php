@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Pages\profiles\companies;
 
 use App\Models\profiles\companies\Company;
+use App\Models\profiles\companies\CompanyContact;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use MoonShine\ActionButtons\ActionButton;
@@ -28,6 +29,7 @@ class CompanyIndex extends Page
 
     public function fields(): array
     {
+//        dd(1111);
         return [
             ID::make()->sortable()->showOnExport(),
             Text::make('Название', 'name')->showOnExport(),
@@ -47,7 +49,7 @@ class CompanyIndex extends Page
     public function components(): array
     {
         return [
-            ActionButton::make('добавить компанию', url: fn () => route('company.create', parameters: ['id' => auth()->id()]))
+            ActionButton::make('добавить компанию', route('company.create', parameters: ['user' => auth()->user()->getAttribute('name')]))
                 ->icon('heroicons.outline.plus')
                 ->primary(),
 
@@ -58,10 +60,31 @@ class CompanyIndex extends Page
                 ->fields($this->fields())
                 ->cast(ModelCast::make(Company::class))
                 ->buttons([
-                    ActionButton::make('заполнить данные', url: fn(Company $company) => route('company.store', parameters: ['id' => $company->getKey()]))
-                        ->icon('heroicons.outline.pencil')->primary(),
-                    ActionButton::make('редактировать', url: fn(Company $company) => route('company.update', parameters: ['id' => $company->getKey()]))
-                        ->icon('heroicons.outline.pencil'),
+                    ActionButton::make('заполнить данные', fn(Company $company) => route('company.profile.create',
+                        parameters: ['user' => auth()->user()->getAttribute('name'),
+                            'company' => $company->getKey()
+                        ]))
+                        ->icon('heroicons.outline.pencil')->primary()
+                        ->canSee(fn(Company $company) => !$company->newQuery()->find($company->getKey())
+                            ->companyActualLocation
+                        ),
+
+                    ActionButton::make('редактировать', fn(Company $company) => route('company.profile.create',
+                        parameters: ['user' => auth()->user()->getAttribute('name'),
+                            'company' => $company->getKey()
+                        ]))
+                        ->icon('heroicons.outline.pencil')
+                        ->canSee(fn(Company $company) => !!$company->newQuery()->find($company->getKey())
+                            ->companyActualLocation
+                        ),
+
+                    ActionButton::make('', fn(Company $company) => route(
+                        'company.delete',
+                        ['user' => auth()->user()->getAttribute('name'), 'id' => $company->getKey()])
+                    )
+                        ->async(method: 'DELETE')
+                        ->error()
+                        ->icon('heroicons.outline.trash'),
                 ]),
         ];
     }

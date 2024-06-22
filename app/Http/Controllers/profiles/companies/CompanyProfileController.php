@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class CompanyProfileController extends Controller
 {
-    public function __invoke(Request $request)
+    public function edit(Request $request)
     {
         return CompanyProfile::make();
     }

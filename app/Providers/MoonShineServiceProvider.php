@@ -16,6 +16,7 @@ use App\Pages\profiles\companies\CompanyForm;
 use App\Pages\profiles\companies\CompanyIndex;
 use App\Pages\profiles\companies\CompanyProfile;
 use App\Pages\profiles\companies\CompanyProfileForm;
+use App\Pages\profiles\companies\MultiForm;
 use App\Pages\UserProfilePage;
 use Closure;
 use MoonShine\Contracts\Resources\ResourceContract;
@@ -52,6 +53,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             new CompanyProfileForm(),
             new CompanyDetails(),
             new CompanyProfile(),
+            new MultiForm(),
         ];
     }
 
@@ -85,7 +87,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
 //            ])->canSee(fn() => !request()->routeIs('moonshine.*')),
 
             MenuGroup::make('Юрлицо', [
-                MenuItem::make('Компания', fn () => route('company.index')),
+                MenuItem::make('Компания', fn () => route('company.index', parameters: auth()->user()->getAttribute('name'))),
             ])->canSee(fn() => !request()->routeIs('moonshine.*')),
         ];
     }

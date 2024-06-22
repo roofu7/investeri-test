@@ -16,6 +16,8 @@ use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Divider;
 use MoonShine\Decorations\Grid;
 use MoonShine\Decorations\LineBreak;
+use MoonShine\Fields\Fields;
+use MoonShine\Fields\Hidden;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Text;
 use MoonShine\Pages\Page;
@@ -90,6 +92,7 @@ class CompanyProfileForm extends Page
             ID::make()->sortable()->showOnExport(),
             Text::make('Электронная почта', 'email')->required()->showOnExport(),
             Text::make('Телефон', 'phone')->required()->showOnExport(),
+            Hidden::make('company_id')->setValue($this->getItemCompany()->id)->required()->showOnExport(),
         ];
     }
 
@@ -186,21 +189,49 @@ class CompanyProfileForm extends Page
         $dataCompanyActualLocation = $this->hasItemCompanyActualLocation() ? $this->getItemCompanyActualLocation() : new CompanyActualLocation();
         $dataCompanyLegalLocation = $this->hasItemCompanyLegalLocation() ? $this->getItemCompanyLegalLocation() : new CompanyLegalLocation();
 
+        $actionCompany = $this->hasItemCompany()
+            ? route('samupdate', $dataCompany)
+            : route('');
+        $actionContact = $this->hasItemCompanyContact()
+            ? route('company.contact.update', $dataCompanyContact)
+            : route('company.contact.store');
+//        $actionActualLocation = $this->hasItemCompanyActualLocation()
+//            ? route('company.contact.update', $dataCompanyActualLocation)
+//            : route('');
+
         return [
             Block::make([
                 Grid::make([
                     Column::make([
                         Block::make('Профиль', [
-                            FormBuilder::make(route('companyprofilestore'))
-                                ->fields($this->fieldsCompany())
-                                ->FillCast($dataCompany, ModelCast::make(Company::class)),
+                            FormBuilder::make($actionCompany)
+                                ->fields(
+                                    Fields::make($this->fieldsCompany())
+                                        ->when(
+                                            $this->hasItemCompany(),
+                                            fn(Fields $fields) => $fields->push(
+                                                Hidden::make('_method')->setValue('PUT')
+                                            )
+                                        )
+                                )
+                                ->FillCast($dataCompany, ModelCast::make(Company::class))
+                                ->async(),
                         ]),
                     ])->columnSpan(6),
                     Column::make([
                         Block::make('Контакты', [
-                            FormBuilder::make(route('companyprofilestore'))
-                                ->fields($this->fieldsCompanyContact())
-                                ->FillCast($dataCompanyContact, ModelCast::make(CompanyContact::class)),
+                            FormBuilder::make($actionContact)
+                                ->fields(
+                                    Fields::make($this->fieldsCompanyContact())
+                                        ->when(
+                                            $this->hasItemCompanyContact(),
+                                            fn(Fields $fields) => $fields->push(
+                                                Hidden::make('_method')->setValue('PUT')
+                                            )
+                                        )
+                                )
+                                ->FillCast($dataCompanyContact, ModelCast::make(CompanyContact::class))
+                                ->async(),
                         ]),
                     ])->columnSpan(6),
                 ]),
@@ -214,14 +245,14 @@ class CompanyProfileForm extends Page
                 Grid::make([
                     Column::make([
                         Block::make('Юридический адрес', [
-                            FormBuilder::make(route('companyprofilestore'))
+                            FormBuilder::make()
                                 ->fields($this->fieldsCompanyActualLocation())
                                 ->FillCast($dataCompanyLegalLocation, ModelCast::make(CompanyLegalLocation::class)),
                         ]),
                     ])->columnSpan(6),
                     Column::make([
                         Block::make('Фактический адрес', [
-                            FormBuilder::make(route('companyprofilestore'))
+                            FormBuilder::make()
                                 ->fields($this->fieldsCompanyActualLocation())
                                 ->FillCast($dataCompanyActualLocation, ModelCast::make(CompanyActualLocation::class)),
                         ]),

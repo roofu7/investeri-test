@@ -18,7 +18,7 @@
 
         </x-moonshine::layout.menu>
             <x-moonshine::layout.profile
-                    route="/profile"
+                    :route="route('userinfo', parameters: auth()->user()->getAttribute('name'))"
                     :log-out-route="route('logout')">
             </x-moonshine::layout.profile>
 

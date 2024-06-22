@@ -18,10 +18,8 @@ use MoonShine\Pages\Page;
 
 class UserAccountController extends Controller
 {
-    public function __invoke(Request $request): UserProfilePage
+    public function index(): UserProfilePage
     {
-//        $users = User::find(8);
-//        dump($users->companyContacts);
         return UserProfilePage::make();
     }
 

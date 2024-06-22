@@ -16,6 +16,7 @@ class CompanyActualLocation extends Model
         'house_number',
         'building_number',
         'room_number',
+        'company_id',
     ];
     public function company(): BelongsTo
     {

@@ -34,7 +34,7 @@ class CompanyProfile extends Page
     public function components(): array
     {
         return [
-            FormBuilder::make(route('companyprofilestore'))
+            FormBuilder::make()
                 ->fields($this->fieldsCompany())
                 ->Cast(ModelCast::make(Company::class)),
         ];

@@ -5,22 +5,23 @@ namespace App\Http\Controllers\profiles\companies;
 use App\Http\Requests\profiles\companies\CompanyStoreRequest;
 use App\Http\Requests\profiles\companies\CompanyUpdateRequest;
 use App\Models\profiles\companies\Company;
-use App\Models\User;
+use App\Models\profiles\companies\CompanyActualLocation;
+use App\Models\profiles\companies\CompanyContact;
+use App\Models\profiles\companies\CompanyLegalLocation;
 use App\Pages\profiles\companies\CompanyForm;
 use App\Pages\profiles\companies\CompanyIndex;
-use Illuminate\Http\RedirectResponse;
+use App\Pages\profiles\companies\CompanyProfileForm;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use MoonShine\Http\Controllers\MoonShineController;
 
 class CompanyController extends MoonShineController
 {
-    public function index(Request $request): CompanyIndex
+    public function index(): CompanyIndex
     {
         return CompanyIndex::make();
     }
 
-    public function create(Request $request): CompanyForm
+    public function create(): CompanyForm
     {
         return CompanyForm::make();
     }
@@ -31,24 +32,33 @@ class CompanyController extends MoonShineController
 //        $id = Auth::id();
 //        $merge = $storeRequest->merge(['user_id' => $id]);
 //        $validated = $merge->validated();
-
-
 //        dd($storeRequest);
-        $company = Company::query()
-        ->create($storeRequest->validated());
+//        parameters: ['id' => $company->getKey()])
 
-        return $this->json('Добавлено', redirect: route('company.index', parameters: ['id' => $company->getKey()]));
+        Company::query()->create($storeRequest->validated());
+
+        return $this->json('Добавлено', redirect: route('company.index', parameters: ['user' => auth()->user()->getAttribute('name')]));
     }
 
-    public function update(Company $company, CompanyUpdateRequest $request)
+    public function edit(): CompanyProfileForm
+
     {
-        $company->update($request->validated());
+        return CompanyProfileForm::make();
+    }
+
+    public function update(Company $company, CompanyUpdateRequest $updateRequest, $id)
+    {
+        $company->query()
+            ->where('id', $id)
+            ->update($updateRequest->validated());
         return $this->json(message: 'Успешно');
     }
 
-    public function delete(Company $company)
+    public function delete(Company $company, $user, $id)
     {
-        $company->delete();
-        return $this->json(message: 'Удалено');
+        $company->query()
+            ->where('id', $id)
+            ->delete();
+        return $this->json(message: 'Успешно');
     }
 }
