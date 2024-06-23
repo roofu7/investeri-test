@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\profiles\companies;
+namespace App\Http\Controllers\profiles\investProjects;
 
 use App\Http\Requests\profiles\companies\CompanyStoreRequest;
 use App\Http\Requests\profiles\companies\CompanyUpdateRequest;
@@ -14,7 +14,7 @@ use App\Pages\profiles\companies\CompanyProfileForm;
 use Illuminate\Http\Request;
 use MoonShine\Http\Controllers\MoonShineController;
 
-class CompanyController extends MoonShineController
+class InvestProjectController extends MoonShineController
 {
     public function index(): CompanyIndex
     {

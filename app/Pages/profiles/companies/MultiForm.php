@@ -23,22 +23,21 @@ use MoonShine\TypeCasts\ModelCast;
 
 class MultiForm extends Page
 {
-    protected ?Company $itemCompany = null;
     protected string $layout = 'userprofile';
+    protected string $title = 'Добавить';
 
-    public function title(): string
-    {
-        return $this->hasItemCompany() ? 'Редактировать' : 'Добавить';
-    }
 
     protected function hasItemCompany(): bool
     {
-        return request()->filled('company');
+       return !!request('company');
     }
 
     protected function getItemCompany(): LengthAwarePaginator
     {
-        return Company::query()->where('id', request('company'))->paginate();
+        return Company::query()
+            ->newQuery()
+            ->where('id', request('company'))
+            ->paginate();
     }
 
     public function fieldsCompany(): array
@@ -83,13 +82,11 @@ class MultiForm extends Page
         $dataCompany = $this->hasItemCompany() ? $this->getItemCompany() : new Company();
 //        dd($dataCompany);
         return [
-            $this->hasItemCompany() ?
             CardsBuilder::make()
                 ->items($this->getItemCompany())
                 ->fields($this->fieldsCompany())
-                ->Cast(ModelCast::make(Company::class)) :
-                FormBuilder::make()
-                    ->fields($this->fieldsCompany()),
+                ->Cast(ModelCast::make(Company::class)),
+
             Divider::make(),
 
             Grid::make([

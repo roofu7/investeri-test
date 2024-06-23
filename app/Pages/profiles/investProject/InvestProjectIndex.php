@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Pages\profiles\companies;
+namespace App\Pages\profiles\investProject;
 
 use App\Models\profiles\companies\Company;
 use App\Models\profiles\companies\CompanyContact;
@@ -18,7 +18,7 @@ use MoonShine\TypeCasts\ModelCast;
 
 //use MoonShine\Pages\Pages;
 
-class CompanyIndex extends Page
+class InvestProjectIndex extends Page
 {
     protected string $layout = 'userprofile';
 
