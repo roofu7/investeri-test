@@ -8,9 +8,15 @@ use App\Models\profiles\companies\CompanyActualLocation;
 use App\Models\profiles\companies\CompanyContact;
 use App\Models\profiles\companies\CompanyInvestProject;
 use App\Models\profiles\companies\CompanyLegalLocation;
+use App\Models\profiles\Individual\IndividualUser;
+use App\Models\profiles\Individual\IndividualUserAddress;
+use App\Models\profiles\Individual\IndividualUserContact;
+use App\Models\profiles\Individual\IndividualUserInvestProject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -52,6 +58,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /*-------------------------------------------------- Company -----------------------------------------------------*/
     public function companyForm(): HasMany
     {
         return $this->hasMany(Company::class);
@@ -71,5 +79,23 @@ class User extends Authenticatable
     public function companyLegalLocations(): HasManyThrough
     {
         return $this->hasManyThrough(CompanyLegalLocation::class, Company::class);
+    }
+
+    /*------------------------------------------- Individual User ----------------------------------------------------*/
+    public function individualUser(): HasOne
+    {
+        return $this->hasOne(IndividualUser::class);
+    }
+    public function individualUserContact(): HasOneThrough
+    {
+        return $this->hasOneThrough(IndividualUserContact::class, IndividualUser::class);
+    }
+    public function individualUserAddress(): HasOneThrough
+    {
+        return $this->hasOneThrough(IndividualUserAddress::class, IndividualUser::class);
+    }
+    public function individualUserProject(): HasOneThrough
+    {
+        return $this->hasOneThrough(IndividualUserInvestProject::class, IndividualUser::class);
     }
 }
