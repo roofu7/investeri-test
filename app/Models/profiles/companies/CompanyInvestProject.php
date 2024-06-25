@@ -13,6 +13,7 @@ class CompanyInvestProject extends Model
     protected $fillable = [
         'name',
         'basic_information',
+        'company_id',
     ];
     public function company(): BelongsTo
     {

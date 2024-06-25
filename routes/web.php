@@ -5,11 +5,9 @@ use App\Http\Controllers\profiles\companies\CompanyActualLocationController;
 use App\Http\Controllers\profiles\companies\CompanyContactController;
 use App\Http\Controllers\profiles\companies\CompanyController;
 use App\Http\Controllers\profiles\companies\CompanyDetailsController;
-use App\Http\Controllers\profiles\companies\CompanyFormController;
-use App\Http\Controllers\profiles\companies\CompanyProfileController;
 use App\Http\Controllers\profiles\companies\MultiFormController;
+use App\Http\Controllers\profiles\investProjects\InvestProjectController;
 use App\Http\Controllers\UserAccountController;
-use App\Models\profiles\companies\CompanyActualLocation;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
@@ -50,9 +48,15 @@ Route::middleware('auth:web')
         Route::get('details/{id}', 'index')->name('details.index');
     })
     ->prefix('personal-account/{user}/invest-projects')
-    ->name('invest.projects')
-    ->namespace('App\Http\Controllers\profiles\companies')
-
+    ->name('invest.projects.')
+    ->namespace('App\Http\Controllers\profiles\investProjects')
+    ->controller(InvestProjectController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('create', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
+        Route::put('update', 'update')->name('update');
+    })
 ;
 
 

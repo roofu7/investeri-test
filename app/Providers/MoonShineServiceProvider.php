@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\profiles\companies\CompanyInvestProject;
 use App\MoonShine\Resources\CompanyActualLocationResource;
 use App\MoonShine\Resources\CompanyContactResource;
+use App\MoonShine\Resources\CompanyInvestProjectResource;
 use App\MoonShine\Resources\MoonShineUserResource;
 use App\MoonShine\Resources\MoonShineUserRoleResource;
 use App\MoonShine\Resources\PageResource;
@@ -17,6 +19,8 @@ use App\Pages\profiles\companies\CompanyIndex;
 use App\Pages\profiles\companies\CompanyProfile;
 use App\Pages\profiles\companies\CompanyProfileForm;
 use App\Pages\profiles\companies\MultiForm;
+use App\Pages\profiles\investProject\InvestProjectForm;
+use App\Pages\profiles\investProject\InvestProjectIndex;
 use App\Pages\UserProfilePage;
 use Closure;
 use MoonShine\Contracts\Resources\ResourceContract;
@@ -37,7 +41,8 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             new UserProfileResource(),
             new CompanyContactResource(),
             new UserCompanyResource(),
-            new CompanyActualLocationResource()
+            new CompanyActualLocationResource(),
+            new CompanyInvestProjectResource()
         ];
     }
 
@@ -54,6 +59,8 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             new CompanyDetails(),
             new CompanyProfile(),
             new MultiForm(),
+            new InvestProjectIndex(),
+            new InvestProjectForm(),
         ];
     }
 
@@ -88,6 +95,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
 
             MenuGroup::make('Юрлицо', [
                 MenuItem::make('Компания', fn () => route('company.index', parameters: auth()->user()->getAttribute('name'))),
+                MenuItem::make('Инвестиционные проекты', fn () => route('invest.projects.index', parameters: [auth()->user()->getAttribute('name')])),
             ])->canSee(fn() => !request()->routeIs('moonshine.*')),
         ];
     }
