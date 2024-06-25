@@ -13,7 +13,7 @@ class IndividualUserInvestProject extends Model
     protected $fillable = [
         'name',
         'basic_information',
-        'company_id',
+        'individual_user_id',
     ];
     public function individualUser(): BelongsTo
     {

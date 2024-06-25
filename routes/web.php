@@ -6,6 +6,12 @@ use App\Http\Controllers\profiles\companies\CompanyContactController;
 use App\Http\Controllers\profiles\companies\CompanyController;
 use App\Http\Controllers\profiles\companies\CompanyDetailsController;
 use App\Http\Controllers\profiles\companies\MultiFormController;
+use App\Http\Controllers\profiles\Individual\IndividualUserAddressController;
+use App\Http\Controllers\profiles\Individual\IndividualUserContactController;
+use App\Http\Controllers\profiles\Individual\IndividualUserController;
+use App\Http\Controllers\profiles\Individual\IndividualUserDetailController;
+use App\Http\Controllers\profiles\Individual\IndividualUserInvestProjectController;
+use App\Http\Controllers\profiles\Individual\IndividualUserPassportController;
 use App\Http\Controllers\profiles\investProjects\InvestProjectController;
 use App\Http\Controllers\UserAccountController;
 use Illuminate\Support\Facades\Route;
@@ -57,6 +63,47 @@ Route::middleware('auth:web')
         Route::post('store', 'store')->name('store');
         Route::put('update', 'update')->name('update');
     })
+    ->prefix('personal-account/{user}/individual')
+    ->name('individual.')
+    ->namespace('App\Http\Controllers\profiles\Individual')
+    ->controller(IndividualUserController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('create', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
+        Route::put('update', 'update')->name('update');
+    })
+    ->controller(IndividualUserPassportController::class)
+    ->group(function () {
+        Route::post('passport/store', 'store')->name('passport.store');
+        Route::put('passport/update', 'update')->name('passport.update');
+    })
+    ->controller(IndividualUserAddressController::class)
+    ->group(function () {
+        Route::post('address/store', 'store')->name('address.store');
+        Route::put('address/update', 'update')->name('address.update');
+    })
+    ->controller(IndividualUserDetailController::class)
+    ->group(function () {
+        Route::get('details/{id}', 'index')->name('details.index');
+    })
+    ->controller(IndividualUserContactController::class)
+    ->group(function () {
+        Route::post('contact/store', 'store')->name('contact.store');
+        Route::put('contact/update', 'update')->name('contact.update');
+    })
+    ->prefix('personal-account/{user}/individual/invest-projects')
+    ->name('individual.invest.projects.')
+    ->namespace('App\Http\Controllers\profiles\Individual')
+    ->controller(IndividualUserInvestProjectController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('create', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
+        Route::put('update', 'update')->name('update');
+    })
+
+
 ;
 
 

@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('individual_users', function (Blueprint $table) {
+        Schema::create('individual_user_passports', function (Blueprint $table) {
             $table->id();
 
-            $table->string('full_name');
-            $table->string('inn');
-            $table->foreignId('user_id')
+            $table->string('serial');
+            $table->string('number');
+            $table->text('issued_whom');
+            $table->string('date_issue');
+            $table->foreignId('individual_user_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('individual_users');
+        Schema::dropIfExists('individual_user_passports');
     }
 };

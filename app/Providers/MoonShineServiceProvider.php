@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Models\profiles\companies\CompanyInvestProject;
 use App\MoonShine\Resources\CompanyActualLocationResource;
 use App\MoonShine\Resources\CompanyContactResource;
 use App\MoonShine\Resources\CompanyInvestProjectResource;
@@ -19,6 +18,9 @@ use App\Pages\profiles\companies\CompanyIndex;
 use App\Pages\profiles\companies\CompanyProfile;
 use App\Pages\profiles\companies\CompanyProfileForm;
 use App\Pages\profiles\companies\MultiForm;
+use App\Pages\profiles\Individual\IndividualUserCreate;
+use App\Pages\profiles\Individual\IndividualUserIndex;
+use App\Pages\profiles\Individual\IndividualUserInvestProjectIndex;
 use App\Pages\profiles\investProject\InvestProjectForm;
 use App\Pages\profiles\investProject\InvestProjectIndex;
 use App\Pages\UserProfilePage;
@@ -61,6 +63,9 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             new MultiForm(),
             new InvestProjectIndex(),
             new InvestProjectForm(),
+            new IndividualUserIndex(),
+            new IndividualUserCreate(),
+            new IndividualUserInvestProjectIndex(),
         ];
     }
 
@@ -94,8 +99,11 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
 //            ])->canSee(fn() => !request()->routeIs('moonshine.*')),
 
             MenuGroup::make('Юрлицо', [
-                MenuItem::make('Компания', fn () => route('company.index', parameters: auth()->user()->getAttribute('name'))),
+                MenuItem::make('Компании', fn () => route('company.index', parameters: auth()->user()->getAttribute('name'))),
                 MenuItem::make('Инвестиционные проекты', fn () => route('invest.projects.index', parameters: [auth()->user()->getAttribute('name')])),
+            ])->canSee(fn() => !request()->routeIs('moonshine.*')),
+            MenuGroup::make('Физлицо', [
+                MenuItem::make('Профиль', fn () => route('individual.index', parameters: auth()->user()->getAttribute('name'))),
             ])->canSee(fn() => !request()->routeIs('moonshine.*')),
         ];
     }

@@ -6,20 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class IndividualUserAddress extends Model
+class IndividualUserPassport extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'region',
-        'city',
-        'street',
-        'house_number',
-        'building_number',
-        'room_number',
+        'serial',
+        'number',
+        'issued_whom',
+        'date_issue',
         'individual_user_id',
     ];
-
     public function individualUser(): BelongsTo
     {
         return $this->belongsTo(IndividualUser::class);

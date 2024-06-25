@@ -39,38 +39,6 @@ class CompanyUpdateRequest extends MoonshineFormRequest
                 'min:13',
                 'max:13',
             ],
-
-
-            //CompanyActualLocation
-//            'region' => [
-//                'required',
-//                'string',
-//                'max:255',
-//            ],
-//            'city' => [
-//                'required',
-//                'string',
-//                'max:255',
-//            ],
-//            'street' => [
-//                'required',
-//                'string',
-//                'max:255',
-//            ],
-//            'house_number' => [
-//                'required',
-//                'max:255'
-//            ],
-//            'building_number' => [
-//                'required',
-//                'max:255'
-//            ],
-//            'room_number' => [
-//                'required',
-//                'max:255'
-//            ],
-
-            //CompanyLegalLocation
         ];
     }
 }

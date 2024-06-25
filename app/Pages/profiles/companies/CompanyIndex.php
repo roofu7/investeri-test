@@ -81,7 +81,7 @@ class CompanyIndex extends Page
                     ActionButton::make('', fn(Company $company) => route
                     (
                         'company.details.index',
-                        [
+                        parameters: [
                             'user' => auth()->user()->getAttribute('name'),
                             'id' => $company->getKey(),
                         ]

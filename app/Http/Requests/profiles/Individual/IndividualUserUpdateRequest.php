@@ -28,14 +28,11 @@ class IndividualUserUpdateRequest extends  MoonShineFormRequest
                 'string',
                 'max:255',
             ],
-            'passport' => [
+            'inn' => [
                 'required',
                 'string',
-                'max:255',
-            ],
-            'user_id' => [
-                'required',
-                'max:255'
+                'min:12',
+                'max:12',
             ],
         ];
     }

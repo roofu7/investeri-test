@@ -5,7 +5,7 @@ namespace App\Http\Requests\profiles\Individual;
 use Illuminate\Foundation\Http\FormRequest;
 use MoonShine\Http\Requests\MoonShineFormRequest;
 
-class IndividualUserStoreRequest extends  MoonShineFormRequest
+class IndividualUserAddressUpdateRequest extends  MoonShineFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,20 +23,39 @@ class IndividualUserStoreRequest extends  MoonShineFormRequest
     public function rules(): array
     {
         return [
-            'full_name' => [
+            'region' => [
                 'required',
                 'string',
                 'max:255',
             ],
-            'inn' => [
+            'city' => [
                 'required',
                 'string',
-                'min:12',
-                'max:12',
+                'max:255',
             ],
-            'user_id' => [
+            'street' => [
                 'required',
-                'max:255'
+                'string',
+                'max:255',
+            ],
+            'house_number' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'building_number' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'room_number' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'individual_user_id' => [
+                'required',
+                'max:255',
             ],
         ];
     }

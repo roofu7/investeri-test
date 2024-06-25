@@ -14,7 +14,6 @@ class IndividualUser extends Model
 
     protected $fillable = [
         'full_name',
-        'passport',
         'inn',
         'user_id',
     ];
@@ -37,5 +36,10 @@ class IndividualUser extends Model
     public function individualUserProject(): HasOne
     {
         return $this->hasOne(IndividualUserInvestProject::class);
+    }
+
+    public function individualUserPassport(): HasOne
+    {
+        return $this->hasOne(IndividualUserPassport::class);
     }
 }

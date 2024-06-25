@@ -12,6 +12,7 @@ use App\Models\profiles\Individual\IndividualUser;
 use App\Models\profiles\Individual\IndividualUserAddress;
 use App\Models\profiles\Individual\IndividualUserContact;
 use App\Models\profiles\Individual\IndividualUserInvestProject;
+use App\Models\profiles\Individual\IndividualUserPassport;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -97,5 +98,9 @@ class User extends Authenticatable
     public function individualUserProject(): HasOneThrough
     {
         return $this->hasOneThrough(IndividualUserInvestProject::class, IndividualUser::class);
+    }
+    public function individualUserPassport(): HasOneThrough
+    {
+        return $this->hasOneThrough(IndividualUserPassport::class, IndividualUser::class);
     }
 }
