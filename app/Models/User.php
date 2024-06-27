@@ -6,11 +6,13 @@ namespace App\Models;
 use App\Models\profiles\companies\Company;
 use App\Models\profiles\companies\CompanyActualLocation;
 use App\Models\profiles\companies\CompanyContact;
+use App\Models\profiles\companies\CompanyInvestOffer;
 use App\Models\profiles\companies\CompanyInvestProject;
 use App\Models\profiles\companies\CompanyLegalLocation;
 use App\Models\profiles\Individual\IndividualUser;
 use App\Models\profiles\Individual\IndividualUserAddress;
 use App\Models\profiles\Individual\IndividualUserContact;
+use App\Models\profiles\Individual\IndividualUserInvestOffer;
 use App\Models\profiles\Individual\IndividualUserInvestProject;
 use App\Models\profiles\Individual\IndividualUserPassport;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -73,6 +75,10 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(CompanyInvestProject::class, Company::class);
     }
+    public function companyInvestOffers(): HasManyThrough
+    {
+        return $this->hasManyThrough(CompanyInvestOffer::class, Company::class);
+    }
     public function companyActualLocations(): HasManyThrough
     {
         return $this->hasManyThrough(CompanyActualLocation::class, Company::class);
@@ -83,24 +89,28 @@ class User extends Authenticatable
     }
 
     /*------------------------------------------- Individual User ----------------------------------------------------*/
-    public function individualUser(): HasOne
+    public function individualUsers(): HasOne
     {
         return $this->hasOne(IndividualUser::class);
     }
-    public function individualUserContact(): HasOneThrough
+    public function individualUserContacts(): HasManyThrough
     {
-        return $this->hasOneThrough(IndividualUserContact::class, IndividualUser::class);
+        return $this->hasManyThrough(IndividualUserContact::class, IndividualUser::class);
     }
-    public function individualUserAddress(): HasOneThrough
+    public function individualUserAddresses(): HasManyThrough
     {
-        return $this->hasOneThrough(IndividualUserAddress::class, IndividualUser::class);
+        return $this->hasManyThrough(IndividualUserAddress::class, IndividualUser::class);
     }
-    public function individualUserProject(): HasOneThrough
+    public function individualUserInvestProjects(): HasManyThrough
     {
-        return $this->hasOneThrough(IndividualUserInvestProject::class, IndividualUser::class);
+        return $this->hasManyThrough(IndividualUserInvestProject::class, IndividualUser::class);
     }
-    public function individualUserPassport(): HasOneThrough
+    public function individualUserInvestOffers(): HasManyThrough
     {
-        return $this->hasOneThrough(IndividualUserPassport::class, IndividualUser::class);
+        return $this->hasManyThrough(IndividualUserInvestOffer::class, IndividualUser::class);
+    }
+    public function individualUserPassports(): HasManyThrough
+    {
+        return $this->hasManyThrough(IndividualUserPassport::class, IndividualUser::class);
     }
 }

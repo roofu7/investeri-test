@@ -5,12 +5,18 @@ use App\Http\Controllers\profiles\companies\CompanyActualLocationController;
 use App\Http\Controllers\profiles\companies\CompanyContactController;
 use App\Http\Controllers\profiles\companies\CompanyController;
 use App\Http\Controllers\profiles\companies\CompanyDetailsController;
+use App\Http\Controllers\profiles\companies\CompanyInvestOfferController;
+use App\Http\Controllers\profiles\companies\CompanyInvestOfferDetailsController;
+use App\Http\Controllers\profiles\companies\CompanyInvestProjectDetailsController;
 use App\Http\Controllers\profiles\companies\MultiFormController;
 use App\Http\Controllers\profiles\Individual\IndividualUserAddressController;
 use App\Http\Controllers\profiles\Individual\IndividualUserContactController;
 use App\Http\Controllers\profiles\Individual\IndividualUserController;
 use App\Http\Controllers\profiles\Individual\IndividualUserDetailController;
+use App\Http\Controllers\profiles\Individual\IndividualUserInvestOfferController;
+use App\Http\Controllers\profiles\Individual\IndividualUserInvestOfferDetailsController;
 use App\Http\Controllers\profiles\Individual\IndividualUserInvestProjectController;
+use App\Http\Controllers\profiles\Individual\IndividualUserInvestProjectDetailsController;
 use App\Http\Controllers\profiles\Individual\IndividualUserPassportController;
 use App\Http\Controllers\profiles\investProjects\InvestProjectController;
 use App\Http\Controllers\UserAccountController;
@@ -53,8 +59,10 @@ Route::middleware('auth:web')
     ->group(function () {
         Route::get('details/{id}', 'index')->name('details.index');
     })
-    ->prefix('personal-account/{user}/invest-projects')
-    ->name('invest.projects.')
+
+    /*------------------------------------------ Company Invest Project ----------------------------------------------*/
+    ->prefix('personal-account/{user}/company/invest-projects')
+    ->name('company.invest.projects.')
     ->namespace('App\Http\Controllers\profiles\investProjects')
     ->controller(InvestProjectController::class)
     ->group(function () {
@@ -62,7 +70,41 @@ Route::middleware('auth:web')
         Route::get('create', 'create')->name('create');
         Route::post('store', 'store')->name('store');
         Route::put('update', 'update')->name('update');
+        Route::delete('{id}', 'delete')->name('delete');
     })
+
+    /*------------------------------------------ Company Investment Offer ----------------------------------------------*/
+    ->prefix('personal-account/{user}/company/invest-offers')
+    ->name('company.invest.offers.')
+    ->namespace('App\Http\Controllers\profiles\companies')
+    ->controller(CompanyInvestOfferController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('create', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
+        Route::put('update', 'update')->name('update');
+        Route::delete('{id}', 'delete')->name('delete');
+    })
+
+    /*-------------------------------------- Company Invest Offer Details ------------------------------------------*/
+    ->prefix('personal-account/{user}/company/invest-offers/details/{id}')
+    ->name('company.invest.offers.details.')
+    ->namespace('App\Http\Controllers\profiles\companies')
+    ->controller(CompanyInvestOfferDetailsController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+    })
+
+    /*-------------------------------------- Company Invest Project Details ------------------------------------------*/
+    ->prefix('personal-account/{user}/company/invest-projects/details/{id}')
+    ->name('company.invest.projects.details.')
+    ->namespace('App\Http\Controllers\profiles\companies')
+    ->controller(CompanyInvestProjectDetailsController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+    })
+
+    /*------------------------------------------------ Individual ----------------------------------------------------*/
     ->prefix('personal-account/{user}/individual')
     ->name('individual.')
     ->namespace('App\Http\Controllers\profiles\Individual')
@@ -101,9 +143,28 @@ Route::middleware('auth:web')
         Route::get('create', 'create')->name('create');
         Route::post('store', 'store')->name('store');
         Route::put('update', 'update')->name('update');
+        Route::delete('{id}', 'delete')->name('delete');
     })
 
+    ->prefix('personal-account/{user}/individual/invest-offers')
+    ->name('individual.invest.offers.')
+    ->namespace('App\Http\Controllers\profiles\Individual')
+    ->controller(IndividualUserInvestOfferController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('create', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
+        Route::put('update', 'update')->name('update');
+        Route::delete('{id}', 'delete')->name('delete');
+    })
 
+    ->prefix('personal-account/{user}/individual/invest-offers/details/{id}')
+    ->name('individual.invest.offers.details.')
+    ->namespace('App\Http\Controllers\profiles\Individual')
+    ->controller(IndividualUserInvestOfferDetailsController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+    })
 ;
 
 

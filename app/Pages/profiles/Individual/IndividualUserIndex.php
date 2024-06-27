@@ -55,7 +55,8 @@ class IndividualUserIndex extends Page
     public function components(): array
     {
         return [
-            ActionButton::make('Создать Физлицо', route('individual.create', parameters: ['user' => auth()->user()->getAttribute('name')]))
+            ActionButton::make('Создать Физлицо', route('individual.create',
+                parameters: ['user' => auth()->user()->getAttribute('name')]))
                 ->canSee(fn() => !$this->hasId())
                 ->icon('heroicons.outline.plus')
                 ->primary(),

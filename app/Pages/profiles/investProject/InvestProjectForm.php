@@ -29,10 +29,6 @@ class InvestProjectForm extends page
     public function companyId()
     {
         return User::find(auth()->id())->companyForm;
-//        dd($company);
-//       return CompanyInvestProject::find($company);
-//       $t = $rel;
-//       return $t->companies;
     }
 
     public function fields(): array

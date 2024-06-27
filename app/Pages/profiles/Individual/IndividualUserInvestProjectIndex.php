@@ -7,8 +7,11 @@ namespace App\Pages\profiles\Individual;
 use App\Models\profiles\companies\Company;
 use App\Models\profiles\companies\CompanyContact;
 use App\Models\profiles\companies\CompanyInvestProject;
+use App\Models\profiles\Individual\IndividualUser;
+use App\Models\profiles\Individual\IndividualUserInvestProject;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use JetBrains\PhpStorm\NoReturn;
 use MoonShine\ActionButtons\ActionButton;
@@ -30,28 +33,22 @@ class IndividualUserInvestProjectIndex extends Page
     }
 
 
-    public function itemsInvestUser(): \Illuminate\Database\Eloquent\Collection
-    {
-        return User::find(auth()->id())->companyInvestProjects;
-//        dd($t);
-//        return Company::query()->where('user_id', auth()->id())->paginate();
-//        $map = $company->map(function ($company) {
-//            return $company->id;
-//        });
-//        dd($company->collect());
-    }
+//    public function hasIndividualUser()
+//    {
+//        $individualUser = IndividualUser::query()
+//            ->where('user_id', auth()->id())->exists();
+//        if (!$individualUser) {
+//            dd('Зарегистрируйте физлицо');
+//        }
+//        $r = IndividualUser::query()
+//            ->find('user_id', auth()->id())->individualUserInvestProject;
+//        dd('ffffff',$r);
+//    }
 
-    public function itemsCompanyInvestProject()
+    public function hasIndividualUserInvestProject(): \Illuminate\Database\Eloquent\Collection
     {
-//        $id = $this->itemsCompany();
-//        foreach ($id as $item) {
-//            dd($item);
-//        }
-        return CompanyInvestProject::all()->where('company_id',$this->itemsCompany());
-//        foreach ($invest as $item) {
-//            dd($item->id);
-//        }
-//        dd($invest);
+        return User::find(auth()->id())->individualUserInvestProjects;
+
     }
 
     public function fields(): array
@@ -69,54 +66,48 @@ class IndividualUserInvestProjectIndex extends Page
     public function components(): array
     {
         return [
-            ActionButton::make('добавить проект', route('invest.projects.create', parameters: ['user' => auth()->user()->getAttribute('name')]))
-                ->icon('heroicons.outline.plus')
-                ->primary(),
-
-            LineBreak::make(),
-
             TableBuilder::make()
-                ->items($this->itemsCompany())
+                ->items($this->hasIndividualUserInvestProject())
                 ->fields($this->fields())
-                ->cast(ModelCast::make(CompanyInvestProject::class)),
-//                ->buttons([
-//                    /*ActionButton::make('заполнить данные', fn(Company $company) => route('company.profile.create',
-//                        parameters: ['user' => auth()->user()->getAttribute('name'),
-//                            'company' => $company->getKey()
-//                        ]))
-//                        ->icon('heroicons.outline.pencil')->primary()
-//                        ->canSee(fn(Company $company) => !$company->newQuery()->find($company->getKey())
-//                            ->companyActualLocation
-//                        ),
-//
-//                    ActionButton::make('редактировать', fn(Company $company) => route('company.profile.create',
-//                        parameters: ['user' => auth()->user()->getAttribute('name'),
-//                            'company' => $company->getKey()
-//                        ]))
-//                        ->icon('heroicons.outline.pencil')
-//                        ->canSee(fn(Company $company) => !!$company->newQuery()->find($company->getKey())
-//                            ->companyActualLocation
-//                        ),*/
-//
-//                    /*actionbutton::make('', fn(company $company) => route
-//                    (
-//                        'company.details.index',
-//                        [
-//                            'user' => auth()->user()->getattribute('name'),
-//                            'id' => $company->getkey(),
-//                        ]
-//                    )
-//                    )
-//                        ->icon('heroicons.outline.eye'),
-//
-//                    actionbutton::make('', fn(company $company) => route(
-//                        'company.delete',
-//                        ['user' => auth()->user()->getattribute('name'), 'id' => $company->getkey()])
-//                    )
-//                        ->async(method: 'delete')
-//                        ->error()
-//                        ->icon('heroicons.outline.trash'),*/
-//                ]),
+                ->cast(ModelCast::make(IndividualUserInvestProject::class))
+                ->buttons([
+                    /*ActionButton::make('заполнить данные', fn(Company $company) => route('company.profile.create',
+                        parameters: ['user' => auth()->user()->getAttribute('name'),
+                            'company' => $company->getKey()
+                        ]))
+                        ->icon('heroicons.outline.pencil')->primary()
+                        ->canSee(fn(Company $company) => !$company->newQuery()->find($company->getKey())
+                            ->companyActualLocation
+                        ),
+
+                    ActionButton::make('редактировать', fn(Company $company) => route('company.profile.create',
+                        parameters: ['user' => auth()->user()->getAttribute('name'),
+                            'company' => $company->getKey()
+                        ]))
+                        ->icon('heroicons.outline.pencil')
+                        ->canSee(fn(Company $company) => !!$company->newQuery()->find($company->getKey())
+                            ->companyActualLocation
+                        ),*/
+
+                    actionbutton::make('', fn(IndividualUserInvestProject $individualUserInvestProject) => route
+                    (
+                        'individual.invest.projects.details.index',
+                        [
+                            'user' => auth()->user()->getattribute('name'),
+                            'id' => $individualUserInvestProject->getkey(),
+                        ]
+                    )
+                    )
+                        ->icon('heroicons.outline.eye'),
+
+                    actionbutton::make('', fn(IndividualUserInvestProject $individualUserInvestProject) => route(
+                        'individual.invest.projects.delete',
+                        ['user' => auth()->user()->getattribute('name'), 'id' => $individualUserInvestProject->getkey()])
+                    )
+                        ->async(method: 'delete')
+                        ->error()
+                        ->icon('heroicons.outline.trash'),
+                ]),
         ];
     }
 }

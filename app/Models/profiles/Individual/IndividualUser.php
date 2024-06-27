@@ -37,6 +37,10 @@ class IndividualUser extends Model
     {
         return $this->hasOne(IndividualUserInvestProject::class);
     }
+    public function individualUserOffer(): HasOne
+    {
+        return $this->hasOne(IndividualUserInvestOffer::class);
+    }
 
     public function individualUserPassport(): HasOne
     {

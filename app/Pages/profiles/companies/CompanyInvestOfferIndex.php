@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Pages\profiles\investProject;
+namespace App\Pages\profiles\companies;
 
+use App\Models\profiles\companies\CompanyInvestOffer;
 use App\Models\profiles\companies\CompanyInvestProject;
 use App\Models\User;
 use App\MoonShine\Resources\CompanyInvestProjectResource;
@@ -20,24 +21,24 @@ use MoonShine\TypeCasts\ModelCast;
 
 //use MoonShine\Pages\Pages;
 
-class InvestProjectIndex extends Page
+class CompanyInvestOfferIndex extends Page
 {
     protected string $layout = 'userprofile';
 
     public function title(): string
     {
-        return $this->title ?: 'InvestProjectIndex';
+        return $this->title ?: 'CompanyInvestOfferIndex';
     }
 
 
     public function itemsCompany(): Collection
     {
-        return User::find(auth()->id())->companyInvestProjects;
+        return User::find(auth()->id())->companyInvestOffers;
     }
 
     public function itemsCompanyInvestProject()
     {
-        return CompanyInvestProject::all()->where('company_id', $this->itemsCompany());
+        return CompanyInvestOffer::all()->where('company_id', $this->itemsCompany());
     }
 
     public function fields(): array
@@ -62,25 +63,25 @@ class InvestProjectIndex extends Page
             TableBuilder::make()
                 ->items($this->itemsCompany())
                 ->fields($this->fields())
-                ->cast(ModelCast::make(CompanyInvestProject::class))
+                ->cast(ModelCast::make(CompanyInvestOffer::class))
                 ->buttons([
 
 
-                    actionbutton::make('', fn(CompanyInvestProject $companyInvestProject) => route
+                    actionbutton::make('', fn(CompanyInvestOffer $companyInvestOffer) => route
                     (
-                        'company.invest.projects.details.index',
+                        'company.invest.offers.details.index',
                         [
                             'user' => auth()->user()->getattribute('name'),
-                            'id' => $companyInvestProject->getkey(),
+                            'id' => $companyInvestOffer->getkey(),
                         ]
                     )
                     )
                         ->icon('heroicons.outline.eye'),
 
-                    actionbutton::make('', fn(CompanyInvestProject $companyInvestProject) => route(
-                        'company.invest.projects.delete', [
+                    actionbutton::make('', fn(CompanyInvestOffer $companyInvestOffer) => route(
+                        'company.invest.offers.delete', [
                         'user' => auth()->user()->getattribute('name'),
-                        'id' => $companyInvestProject->getkey()])
+                        'id' => $companyInvestOffer->getkey()])
                     )
                         ->async(method: 'delete')
                         ->error()

@@ -11,6 +11,7 @@ use App\Models\profiles\companies\CompanyInvestProject;
 use App\Models\profiles\Individual\IndividualUser;
 use App\Models\profiles\Individual\IndividualUserAddress;
 use App\Models\profiles\Individual\IndividualUserContact;
+use App\Models\profiles\Individual\IndividualUserInvestOffer;
 use App\Models\profiles\Individual\IndividualUserInvestProject;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -35,6 +36,7 @@ class IndividualUserDetails extends Page
     protected ?Company $itemIndividualUserContact = null;
     protected ?CompanyActualLocation $itemIndividualUserAddress = null;
     protected ?CompanyInvestProject $itemIndividualUserInvestProject = null;
+    protected ?IndividualUserInvestOffer $itemIndividualUserInvestOffer = null;
 
     protected string $layout = 'userprofile';
     protected string $title = 'IndividualUserDetails';
@@ -159,33 +161,110 @@ class IndividualUserDetails extends Page
         if (!is_null($this->itemIndividualUserInvestProject)) {
             return $this->itemIndividualUserInvestProject;
         }
-        return IndividualUserInvestProject::query()->findOrFail($this->itemsIndividualUserInvestProject());
+        return IndividualUserInvestProject::query()
+            ->findOrFail($this->itemsIndividualUserInvestProject());
     }
 
     public function fieldsIndividualUserInvestProject(): array
     {
         return [
-            ID::make()->sortable()->showOnExport(),
-            Text::make('Название', 'name')->required()->showOnExport(),
-            Textarea::make('Краткая информация', 'basic_information')->required()->showOnExport(),
-            Hidden::make('individual_user_id')->setValue(request('id'))->required()->showOnExport(),
+            ID::make()
+                ->sortable()
+                ->showOnExport(),
+            Text::make('Название', 'name')
+                ->required()
+                ->showOnExport(),
+            Textarea::make('Краткая информация', 'basic_information')
+                ->required()
+                ->showOnExport(),
+            Hidden::make('individual_user_id')
+                ->setValue(request('id'))
+                ->required()
+                ->showOnExport(),
         ];
     }
 
 
-    /*public function components(): array
+    /*------------------------------------------------ InvestOffer -------------------------------------------------*/
+
+    public function itemsIndividualUserInvestOffer()
     {
+        $r = IndividualUserInvestOffer::all()->where('individual_user_id', request('id'));
+        foreach ($r as $item) {
+            return ($item['id']);
+        }
+        return ([]);
+    }
 
+    public function hasIndividualUserInvestOffer(): bool
+    {
+        return IndividualUserInvestOffer::query()
+            ->where('individual_user_id', request('id'))
+            ->exists();
+    }
 
+    public function getIndividualUserInvestOffer(): Model|Collection|CompanyActualLocation|Builder|array|null
+    {
+        if (!is_null($this->itemIndividualUserInvestOffer)) {
+            return $this->itemIndividualUserInvestOffer;
+        }
+        return IndividualUserInvestOffer::query()
+            ->findOrFail($this->itemsIndividualUserInvestOffer());
+    }
 
+    public function fieldsIndividualUserInvestOffer(): array
+    {
+        return [
+            ID::make()
+                ->sortable()
+                ->showOnExport(),
+            Text::make('Название', 'name')
+                ->required()
+                ->showOnExport(),
+            Textarea::make('Краткая информация', 'basic_information')
+                ->required()
+                ->showOnExport(),
+            Hidden::make('individual_user_id')
+                ->setValue(request('id'))
+                ->required()
+                ->showOnExport(),
+        ];
+    }
 
+    public function components(): array
+    {
+        $dataIndividualUser = $this->hasRequest()
+            ? $this->getItemIndividualUser()
+            : new IndividualUser();
+        $dataIndividualUserContact = $this->hasIndividualUserContact()
+            ? $this->getIndividualUserContact()
+            : new IndividualUserContact();
+        $dataIndividualUserAddress = $this->hasIndividualUserAddress()
+            ? $this->getIndividualUserAddress()
+            : new IndividualUserAddress();
+        $dataIndividualUserInvestProject = $this->hasIndividualUserInvestProject()
+            ? $this->getIndividualUserInvestProject()
+            : new IndividualUserInvestProject();
+        $dataIndividualUserInvestOffer = $this->hasIndividualUserInvestOffer()
+            ? $this->getIndividualUserInvestOffer()
+            : new IndividualUserInvestOffer();
 
-//        $actionCompany = $this->hasRequest()
-//            ? route('samupdate', $dataCompany)
-//            : route('');
-
-
-
+        $actionContact = $this->hasIndividualUserContact()
+            ? route('individual.contact.update', $dataIndividualUserContact)
+            : route('individual.contact.store',
+                parameters: ['user' => auth()->user()->getAttribute('name')]);
+        $actionAddress = $this->hasIndividualUserAddress()
+            ? route('individual.address.update', $dataIndividualUserAddress)
+            : route('individual.address.store',
+                parameters: ['user' => auth()->user()->getAttribute('name')]);
+        $actionInvestProject = $this->hasIndividualUserInvestProject()
+            ? route('individual.invest.projects.update', $dataIndividualUserInvestProject)
+            : route('individual.invest.projects.store',
+                parameters: ['user' => auth()->user()->getAttribute('name')]);
+        $actionInvestOffer = $this->hasIndividualUserInvestOffer()
+            ? route('individual.invest.offers.update', $dataIndividualUserInvestOffer)
+            : route('individual.invest.offers.store',
+                parameters: ['user' => auth()->user()->getAttribute('name')]);
 
         return [
             Grid::make([
@@ -194,112 +273,96 @@ class IndividualUserDetails extends Page
                         Grid::make([
                             Column::make([
                                 Block::make('Редактировать Данные Компании', [
-
+                                    FormBuilder::make(route('individual.update', $dataIndividualUser))
+                                        ->fields(
+                                            Fields::make($this->fieldsCompany())
+                                                ->when(
+                                                    $this->hasRequest(),
+                                                    fn(Fields $fields) => $fields->push(
+                                                        Hidden::make('_method')->setValue('PUT')
+                                                    )
+                                                )
+                                        )
+                                        ->FillCast($dataIndividualUser, ModelCast::make(IndividualUser::class))
+                                        ->async(),
                                 ]),
                             ])->columnSpan(4),
                             Column::make([
-                                Block::make($this->hasCompanyContact() ? 'Редактировать Контакты' : 'Заполнить Контакты', [
-
+                                Block::make($this->hasIndividualUserContact()
+                                    ? 'Редактировать Контакты'
+                                    : 'Заполнить Контакты', [
+                                    FormBuilder::make($actionContact)
+                                        ->fields(
+                                            Fields::make($this->fieldsIndividualUserContact())
+                                                ->when(
+                                                    $this->hasIndividualUserContact(),
+                                                    fn(Fields $fields) => $fields->push(
+                                                        Hidden::make('_method')->setValue('PUT')
+                                                    )
+                                                )
+                                        )->FillCast(
+                                            $dataIndividualUserContact,
+                                            ModelCast::make(IndividualUserContact::class)
+                                        )->async(),
                                 ]),
                             ])->columnSpan(4),
                             Column::make([
-                                Block::make($this->hasCompanyActualLocation() ? 'Редактировать Адрес' : 'Заполнить Адрес', [
-
+                                Block::make($this->hasIndividualUserAddress()
+                                    ? 'Редактировать Адрес'
+                                    : 'Заполнить Адрес', [
+                                    FormBuilder::make($actionAddress)
+                                        ->fields(
+                                            Fields::make($this->fieldsIndividualUserAddress())
+                                                ->when(
+                                                    $this->hasIndividualUserAddress(),
+                                                    fn(Fields $fields) => $fields->push(
+                                                        Hidden::make('_method')->setValue('PUT')
+                                                    )
+                                                )
+                                        )->FillCast(
+                                            $dataIndividualUserAddress,
+                                            ModelCast::make(IndividualUserAddress::class)
+                                        )->async(),
                                 ]),
                             ])->columnSpan(4),
                         ]),
                     ]),
                 ])->columnSpan(8),
                 Column::make([
-                    Collapse::make($this->hasCompanyInvestProject() ? 'Редактировать Инвестиционный проект' : 'Создать Инвестиционный проект', [
+                    Collapse::make($this->hasIndividualUserInvestProject()
+                        ? 'Редактировать Инвестиционный проект'
+                        : 'Создать Инвестиционный проект', [
                         FormBuilder::make($actionInvestProject)
                             ->fields(
-                                Fields::make($this->fieldsCompanyInvestProject())
+                                Fields::make($this->fieldsIndividualUserInvestProject())
                                     ->when(
-                                        $this->hasCompanyInvestProject(),
+                                        $this->hasIndividualUserInvestProject(),
                                         fn(Fields $fields) => $fields->push(
                                             Hidden::make('_method')->setValue('PUT')
                                         )
                                     )
                             )
-                            ->FillCast($dataCompanyInvestProject, ModelCast::make(CompanyInvestProject::class))
+                            ->FillCast($dataIndividualUserInvestProject, ModelCast::make(IndividualUserInvestProject::class))
                             ->async(),
-                    ])
+                    ]),
+                    Collapse::make($this->hasIndividualUserInvestOffer()
+                        ? 'Редактировать Инвестиционное предложение'
+                        : 'Создать Инвестиционное предложение', [
+                        FormBuilder::make($actionInvestOffer)
+                            ->fields(
+                                Fields::make($this->fieldsIndividualUserInvestOffer())
+                                    ->when(
+                                        $this->hasIndividualUserInvestOffer(),
+                                        fn(Fields $fields) => $fields->push(
+                                            Hidden::make('_method')->setValue('PUT')
+                                        )
+                                    )
+                            )
+                            ->FillCast($dataIndividualUserInvestOffer, ModelCast::make(IndividualUserInvestOffer::class))
+                            ->async(),
+                    ]),
                 ])->columnSpan(4),
             ]),
-        ];
-    }*/
-    public function components(): array
-    {
-        $dataIndividualUser = $this->hasRequest() ? $this->getItemIndividualUser() : new IndividualUser();
-        $dataIndividualUserContact = $this->hasIndividualUserContact() ? $this->getIndividualUserContact() : new IndividualUserContact();
-        $dataIndividualUserAddress = $this->hasIndividualUserAddress() ? $this->getIndividualUserAddress() : new IndividualUserAddress();
-        $dataIndividualUserInvestProject = $this->hasIndividualUserInvestProject() ? $this->getIndividualUserInvestProject() : new IndividualUserInvestProject();
-
-        $actionContact = $this->hasIndividualUserContact()
-            ? route('individual.contact.update', $dataIndividualUserContact)
-            : route('individual.contact.store', parameters: ['user' => auth()->user()->getAttribute('name')]);
-        $actionAddress = $this->hasIndividualUserAddress()
-            ? route('individual.address.update', $dataIndividualUserAddress)
-            : route('individual.address.store', parameters: ['user' => auth()->user()->getAttribute('name')]);
-        $actionInvestProject = $this->hasIndividualUserInvestProject()
-            ? route('individual.invest.projects.update', $dataIndividualUserInvestProject)
-            : route('individual.invest.projects.store', parameters: ['user' => auth()->user()->getAttribute('name')]);
-
-        return [
-            FormBuilder::make(route('individual.update', $dataIndividualUser))
-                ->fields(
-                    Fields::make($this->fieldsCompany())
-                        ->when(
-                            $this->hasRequest(),
-                            fn(Fields $fields) => $fields->push(
-                                Hidden::make('_method')->setValue('PUT')
-                            )
-                        )
-                )
-                ->FillCast($dataIndividualUser, ModelCast::make(IndividualUser::class))
-                ->async(),
-
-            FormBuilder::make($actionContact)
-                ->fields(
-                    Fields::make($this->fieldsIndividualUserContact())
-                        ->when(
-                            $this->hasIndividualUserContact(),
-                            fn(Fields $fields) => $fields->push(
-                                Hidden::make('_method')->setValue('PUT')
-                            )
-                        )
-                )->FillCast(
-                    $dataIndividualUserContact,
-                    ModelCast::make(IndividualUserContact::class)
-                )->async(),
-
-            FormBuilder::make($actionAddress)
-                ->fields(
-                    Fields::make($this->fieldsIndividualUserAddress())
-                        ->when(
-                            $this->hasIndividualUserAddress(),
-                            fn(Fields $fields) => $fields->push(
-                                Hidden::make('_method')->setValue('PUT')
-                            )
-                        )
-                )->FillCast(
-                    $dataIndividualUserAddress,
-                    ModelCast::make(IndividualUserAddress::class)
-                )->async(),
-
-            FormBuilder::make($actionInvestProject)
-                ->fields(
-                    Fields::make($this->fieldsIndividualUserInvestProject())
-                        ->when(
-                            $this->hasIndividualUserInvestProject(),
-                            fn(Fields $fields) => $fields->push(
-                                Hidden::make('_method')->setValue('PUT')
-                            )
-                        )
-                )
-                ->FillCast($dataIndividualUserInvestProject, ModelCast::make(IndividualUserInvestProject::class))
-                ->async(),
         ];
     }
 }

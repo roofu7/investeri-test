@@ -6,7 +6,10 @@ namespace App\Providers;
 
 use App\MoonShine\Resources\CompanyActualLocationResource;
 use App\MoonShine\Resources\CompanyContactResource;
+use App\MoonShine\Resources\CompanyInvestOfferResource;
 use App\MoonShine\Resources\CompanyInvestProjectResource;
+use App\MoonShine\Resources\IndividualUserInvestOfferResource;
+use App\MoonShine\Resources\IndividualUserResource;
 use App\MoonShine\Resources\MoonShineUserResource;
 use App\MoonShine\Resources\MoonShineUserRoleResource;
 use App\MoonShine\Resources\PageResource;
@@ -15,11 +18,17 @@ use App\MoonShine\Resources\UserProfileResource;
 use App\Pages\profiles\companies\CompanyDetails;
 use App\Pages\profiles\companies\CompanyForm;
 use App\Pages\profiles\companies\CompanyIndex;
+use App\Pages\profiles\companies\CompanyInvestOfferDetails;
+use App\Pages\profiles\companies\CompanyInvestOfferIndex;
 use App\Pages\profiles\companies\CompanyProfile;
 use App\Pages\profiles\companies\CompanyProfileForm;
 use App\Pages\profiles\companies\MultiForm;
 use App\Pages\profiles\Individual\IndividualUserCreate;
+use App\Pages\profiles\Individual\IndividualUserDetails;
 use App\Pages\profiles\Individual\IndividualUserIndex;
+use App\Pages\profiles\Individual\IndividualUserInvestOfferDetails;
+use App\Pages\profiles\Individual\IndividualUserInvestOfferIndex;
+use App\Pages\profiles\Individual\IndividualUserInvestProjectDetails;
 use App\Pages\profiles\Individual\IndividualUserInvestProjectIndex;
 use App\Pages\profiles\investProject\InvestProjectForm;
 use App\Pages\profiles\investProject\InvestProjectIndex;
@@ -44,7 +53,11 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             new CompanyContactResource(),
             new UserCompanyResource(),
             new CompanyActualLocationResource(),
-            new CompanyInvestProjectResource()
+            new CompanyInvestProjectResource(),
+            new CompanyInvestOfferResource(),
+            new IndividualUserInvestOfferResource(),
+            new IndividualUserResource(),
+
         ];
     }
 
@@ -60,12 +73,18 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             new CompanyProfileForm(),
             new CompanyDetails(),
             new CompanyProfile(),
+            new CompanyInvestOfferIndex(),
+            new CompanyInvestOfferDetails(),
             new MultiForm(),
             new InvestProjectIndex(),
             new InvestProjectForm(),
             new IndividualUserIndex(),
             new IndividualUserCreate(),
+            new IndividualUserDetails(),
             new IndividualUserInvestProjectIndex(),
+            new IndividualUserInvestOfferIndex(),
+            new IndividualUserInvestOfferDetails(),
+            new IndividualUserInvestProjectDetails(),
         ];
     }
 
@@ -90,20 +109,22 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
                 MenuItem::make('Создать страницу', new PageResource()),
             ])->canSee(fn() => request()->routeIs('moonshine.*')),
 
-//            MenuGroup::make('Project', [
-//                MenuItem::make('Создать project', static fn() => route('home')),
-//            ])->canSee(fn() => !request()->routeIs('moonshine.*')),
-
-//            MenuGroup::make('Test', [
-//                MenuItem::make('Создать test', new UserAccountController()),
-//            ])->canSee(fn() => !request()->routeIs('moonshine.*')),
-
             MenuGroup::make('Юрлицо', [
-                MenuItem::make('Компании', fn () => route('company.index', parameters: auth()->user()->getAttribute('name'))),
-                MenuItem::make('Инвестиционные проекты', fn () => route('invest.projects.index', parameters: [auth()->user()->getAttribute('name')])),
+                MenuItem::make('Компании', fn () => route('company.index',
+                    parameters: auth()->user()->getAttribute('name'))),
+                MenuItem::make('Инвестиционные проекты', fn () => route('company.invest.projects.index',
+                    parameters: auth()->user()->getAttribute('name'))),
+                MenuItem::make('Инвестиционные предложения', fn () => route('company.invest.offers.index',
+                    parameters: auth()->user()->getAttribute('name'))),
             ])->canSee(fn() => !request()->routeIs('moonshine.*')),
+
             MenuGroup::make('Физлицо', [
-                MenuItem::make('Профиль', fn () => route('individual.index', parameters: auth()->user()->getAttribute('name'))),
+                MenuItem::make('Профиль', fn () => route('individual.index',
+                    parameters: auth()->user()->getAttribute('name'))),
+                MenuItem::make('Инвестиционнй проект', fn () => route('individual.invest.projects.index',
+                    parameters: auth()->user()->getAttribute('name'))),
+                MenuItem::make('Инвестиционное предложение', fn () => route('individual.invest.offers.index',
+                    parameters: auth()->user()->getAttribute('name'))),
             ])->canSee(fn() => !request()->routeIs('moonshine.*')),
         ];
     }

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Company extends Model
@@ -26,9 +27,13 @@ class Company extends Model
     {
         return $this->hasOne(CompanyContact::class);
     }
-    public function companyInvestProject(): HasOne
+    public function companyInvestProject(): HasMany
     {
-        return $this->hasOne(CompanyInvestProject::class);
+        return $this->hasMany(CompanyInvestProject::class);
+    }
+    public function companyInvestOffer(): HasMany
+    {
+        return $this->hasMany(CompanyInvestOffer::class);
     }
     public function companyActualLocation(): HasOne
     {

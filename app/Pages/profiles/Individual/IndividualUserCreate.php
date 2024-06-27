@@ -61,7 +61,7 @@ class IndividualUserCreate extends Page
         if (!$this->hasId()) {
             return 1;
         }
-        return User::find(auth()->id())->individualUser->id;
+        return User::find(auth()->id())->individualUsers->id;
     }
 
     public function fieldsIndividualUserPassport(): array

@@ -47,11 +47,11 @@ class IndividualUserInvestProjectController extends MoonShineController
         return $this->json(message: 'Успешно');
     }
 
-//    public function delete(Company $company, $user, $id)
-//    {
-//        $company->query()
-//            ->where('id', $id)
-//            ->delete();
-//        return $this->json(message: 'Успешно');
-//    }
+    public function delete(IndividualUserInvestProject $individualUserInvestProject, $user, $id)
+    {
+        $individualUserInvestProject->query()
+            ->where('id', $id)
+            ->delete();
+        return $this->json(message: 'Успешно');
+    }
 }
