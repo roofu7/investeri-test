@@ -1,13 +1,12 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\company\invest\projects;
 
 use App\Models\User;
 use Tests\TestCase;
 
 class CompanyInvestProjectIndexTest extends TestCase
 {
-
     public function test_the_company_index_page_returns_a_successful_response_if_user_is_auth()
     {
         $this->withoutExceptionHandling();
