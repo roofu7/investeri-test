@@ -11,9 +11,9 @@
 <div>
     @auth()
         <div>
-            <a href="{{ route('userinfo', parameters: auth()->user()->getAttribute('name')) }}"><p>user-name</p></a>
+            <a href="{{ route('userinfo', parameters: auth()->user()->getAttribute('name')) }}"><p>личный кабинет</p></a>
 
-            <a href="{{ route('logout') }}"><p>escape</p></a>
+            <a href="{{ route('logout') }}"><p>выход</p></a>
         </div>
     @elseguest()
         <a href="{{ route('login') }}"><p>вход</p></a>

@@ -20,9 +20,6 @@ class RegisterForm
             Email::make('почта', 'email')->required(),
             Password::make('пароль', 'password')->required(),
             PasswordRepeat::make('повторить пароль', 'password confirmation')->required(),
-        ])->buttons([
-            ActionButton::make('регистрация', route('register'))
-                ->secondary(),
         ])->submit('регистрация', ['class' => 'btn btn-primary w-full']);
     }
 }

@@ -18,9 +18,6 @@ class LoginForm
         )->fields([
             Email::make('почта', 'email')->required(),
             Password::make('пароль', 'password')->required(),
-        ])->buttons([
-            ActionButton::make('регистрация', route('register'))
-                ->secondary(),
-        ])->submit('войти', ['class' => 'btn btn-primary']);
+        ])->submit('войти', ['class' => 'btn btn-primary w-full']);
     }
 }
