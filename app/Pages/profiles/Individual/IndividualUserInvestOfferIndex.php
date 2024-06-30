@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace App\Pages\profiles\Individual;
 
-use App\Models\profiles\companies\CompanyInvestOffer;
-use App\Models\profiles\companies\CompanyInvestProject;
 use App\Models\profiles\Individual\IndividualUserInvestOffer;
 use App\Models\User;
-use App\MoonShine\Resources\CompanyInvestProjectResource;
 use App\MoonShine\Resources\IndividualUserResource;
-use App\MoonShine\Resources\UserCompanyResource;
 use Illuminate\Database\Eloquent\Collection;
 use MoonShine\ActionButtons\ActionButton;
+use MoonShine\Components\FormBuilder;
 use MoonShine\Components\TableBuilder;
+use MoonShine\Decorations\Heading;
+use MoonShine\Enums\JsEvent;
+use MoonShine\Fields\Hidden;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Relationships\BelongsTo;
-use MoonShine\Fields\Relationships\HasManyThrough;
 use MoonShine\Fields\Text;
 use MoonShine\Pages\Page;
+use MoonShine\Support\AlpineJs;
 use MoonShine\TypeCasts\ModelCast;
 
 class IndividualUserInvestOfferIndex extends Page
@@ -48,11 +48,12 @@ class IndividualUserInvestOfferIndex extends Page
             Text::make('Название', 'name')->showOnExport(),
             Text::make('Краткая информация', 'basic_information')->showOnExport(),
             BelongsTo::make(
-                'Компания',
+                'Физлицо',
                 'individualUser',
                 resource: new IndividualUserResource())
         ];
     }
+
 
     /**
      * @inheritDoc
@@ -65,8 +66,6 @@ class IndividualUserInvestOfferIndex extends Page
                 ->fields($this->fields())
                 ->cast(ModelCast::make(IndividualUserInvestOffer::class))
                 ->buttons([
-
-
                     actionbutton::make('', fn(
                         IndividualUserInvestOffer $individualUserInvestOffer
                     ) => route(
@@ -79,12 +78,28 @@ class IndividualUserInvestOfferIndex extends Page
                     )
                         ->icon('heroicons.outline.eye'),
 
-                    actionbutton::make('', fn(IndividualUserInvestOffer $individualUserInvestOffer) => route(
+                    ActionButton::make('', fn(IndividualUserInvestOffer $individualUserInvestOffer) => route(
                         'individual.invest.offers.delete', [
-                        'user' => auth()->user()->getattribute('name'),
-                        'id' => $individualUserInvestOffer->getkey()])
+                        'user' => auth()->user()->getAttribute('name'),
+                        'id' => $individualUserInvestOffer->getKey()])
                     )
-                        ->async(method: 'delete')
+                        ->inModal(
+                            'Удалить',
+                            fn(IndividualUserInvestOffer $individualUserInvestOffer) => FormBuilder::make(route(
+                                    'individual.invest.offers.delete', [
+                                    'user' => auth()->user()->getAttribute('name'),
+                                    'id' => $individualUserInvestOffer->getKey()])
+                            )->fields([
+                                Hidden::make('_method')->setValue('DELETE'),
+                                Heading::make('Вы уверены?')
+                            ])
+                                ->async(
+                                    asyncEvents: [
+                                        AlpineJs::event(JsEvent::TABLE_UPDATED, 'individual-index')
+                                    ]
+                                )
+                                ->submit('Подтвердить', ['class' => 'btn-secondary'])
+                        )
                         ->error()
                         ->icon('heroicons.outline.trash'),
                 ]),

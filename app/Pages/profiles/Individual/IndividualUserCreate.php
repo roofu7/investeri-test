@@ -61,7 +61,9 @@ class IndividualUserCreate extends Page
         if (!$this->hasId()) {
             return 1;
         }
-        return User::find(auth()->id())->individualUsers->id;
+        return User::find(auth()->id())
+            ->individualUsers
+            ->id;
     }
 
     public function fieldsIndividualUserPassport(): array
@@ -102,17 +104,28 @@ class IndividualUserCreate extends Page
     public function components(): array
     {
         return [
-            FormBuilder::make(route('individual.store',
-                parameters: ['user' => auth()->user()->getAttribute('name')]))
-                ->fields($this->fieldsIndividualUser())
-                ->Cast(ModelCast::make(IndividualUser::class))
-                ->async(),
+            Grid::make([
+                Column::make([
+                    Block::make('ФИО и ИНН', [
 
-            FormBuilder::make(route('individual.passport.store',
-                parameters: ['user' => auth()->user()->getAttribute('name')]))
-                ->fields($this->fieldsIndividualUserPassport())
-                ->Cast(ModelCast::make(IndividualUserPassport::class))
-                ->async(),
+                        FormBuilder::make(route('individual.store',
+                            parameters: ['user' => auth()->user()->getAttribute('name')]))
+                            ->fields($this->fieldsIndividualUser())
+                            ->Cast(ModelCast::make(IndividualUser::class))
+                            ->async(),
+                    ])
+                ])->columnSpan(6),
+                Column::make([
+                    Block::make('Паспорт', [
+                        FormBuilder::make(route('individual.passport.store',
+                            parameters: ['user' => auth()->user()->getAttribute('name')]))
+                            ->fields($this->fieldsIndividualUserPassport())
+                            ->Cast(ModelCast::make(IndividualUserPassport::class))
+                            ->async(),
+                    ])
+                ])->columnSpan(6),
+            ]),
+
 
             FormBuilder::make(route('individual.address.store',
                 parameters: ['user' => auth()->user()->getAttribute('name')]))

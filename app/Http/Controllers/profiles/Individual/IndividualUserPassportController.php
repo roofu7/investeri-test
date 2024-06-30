@@ -16,6 +16,8 @@ class IndividualUserPassportController extends MoonShineController
         $individualUserPassport
             ->query()
             ->create($storeRequest->validated());
-        return $this->json(message: 'Успешно');
+        return $this->json(message: 'Успешно',
+            redirect: route('individual.index',
+                parameters: ['user' => auth()->user()->getAttribute('name')]));
     }
 }

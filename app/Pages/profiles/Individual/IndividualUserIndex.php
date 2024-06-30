@@ -8,14 +8,22 @@ use App\Models\profiles\companies\Company;
 use App\Models\profiles\companies\CompanyContact;
 use App\Models\profiles\Individual\IndividualUser;
 use App\Models\User;
+use App\MoonShine\Resources\IndividualUserInvestOfferResource;
+use App\MoonShine\Resources\IndividualUserInvestProjectResource;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use MoonShine\ActionButtons\ActionButton;
+use MoonShine\Components\FormBuilder;
 use MoonShine\Components\TableBuilder;
 use MoonShine\Decorations\Divider;
+use MoonShine\Decorations\Heading;
 use MoonShine\Decorations\LineBreak;
+use MoonShine\Enums\JsEvent;
+use MoonShine\Fields\Hidden;
 use MoonShine\Fields\ID;
+use MoonShine\Fields\Relationships\HasMany;
 use MoonShine\Fields\Text;
 use MoonShine\Pages\Page;
+use MoonShine\Support\AlpineJs;
 use MoonShine\TypeCasts\ModelCast;
 
 class IndividualUserIndex extends Page
@@ -33,6 +41,20 @@ class IndividualUserIndex extends Page
             ID::make()->sortable()->showOnExport(),
             Text::make('ФИО', 'full_name')->showOnExport(),
             Text::make('ИНН', 'inn')->showOnExport(),
+            HasMany::make(
+                'Инвестиционный проект',
+                'individualUserProject',
+                resource: new IndividualUserInvestProjectResource())
+                ->fields([
+                    Text::make('Название', 'name')
+                ]),
+            HasMany::make(
+                'Инвестиционное предложение',
+                'individualUserOffer',
+                resource: new IndividualUserInvestOfferResource())
+                ->fields([
+                    Text::make('Название', 'name')
+                ])
         ];
     }
 
@@ -62,6 +84,8 @@ class IndividualUserIndex extends Page
                 ->primary(),
 
             TableBuilder::make()
+                ->name('individual-index')
+                ->async()
                 ->items($this->items())
                 ->fields($this->fields())
                 ->cast(ModelCast::make(IndividualUser::class))
@@ -74,33 +98,30 @@ class IndividualUserIndex extends Page
                         ]))
                         ->icon('heroicons.outline.eye')->primary(),
 
-//                    ActionButton::make('редактировать', fn(Company $company) => route('company.profile.create',
-//                        parameters: ['user' => auth()->user()->getAttribute('name'),
-//                            'company' => $company->getKey()
-//                        ]))
-//                        ->icon('heroicons.outline.pencil')
-//                        ->canSee(fn(Company $company) => !!$company->newQuery()->find($company->getKey())
-//                            ->companyActualLocation
-//                        ),
-//
-//                    ActionButton::make('', fn(Company $company) => route
-//                    (
-//                        'company.details.index',
-//                        [
-//                            'user' => auth()->user()->getAttribute('name'),
-//                            'id' => $company->getKey(),
-//                        ]
-//                    )
-//                    )
-//                        ->icon('heroicons.outline.eye'),
-//
-//                    ActionButton::make('', fn(Company $company) => route(
-//                        'company.delete',
-//                        ['user' => auth()->user()->getAttribute('name'), 'id' => $company->getKey()])
-//                    )
-//                        ->async(method: 'DELETE')
-//                        ->error()
-//                        ->icon('heroicons.outline.trash'),
+                    ActionButton::make('', fn(IndividualUser $individualUser) => route(
+                        'individual.delete', [
+                        'user' => auth()->user()->getAttribute('name'),
+                        'id' => $individualUser->getKey()])
+                    )
+                        ->inModal(
+                            'Удалить',
+                            fn(IndividualUser $individualUser) => FormBuilder::make(route(
+                                    'individual.delete', [
+                                    'user' => auth()->user()->getAttribute('name'),
+                                    'id' => $individualUser->getKey()])
+                            )->fields([
+                                Hidden::make('_method')->setValue('DELETE'),
+                                Heading::make('Вы уверены?')
+                            ])
+                                ->async(
+                                    asyncEvents: [
+                                        AlpineJs::event(JsEvent::TABLE_UPDATED, 'individual-index')
+                                    ]
+                                )
+                                ->submit('Подтвердить', ['class' => 'btn-secondary'])
+                        )
+                        ->error()
+                        ->icon('heroicons.outline.trash'),
                 ]),
         ];
     }

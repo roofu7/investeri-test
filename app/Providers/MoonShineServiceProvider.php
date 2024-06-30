@@ -9,6 +9,7 @@ use App\MoonShine\Resources\CompanyContactResource;
 use App\MoonShine\Resources\CompanyInvestOfferResource;
 use App\MoonShine\Resources\CompanyInvestProjectResource;
 use App\MoonShine\Resources\IndividualUserInvestOfferResource;
+use App\MoonShine\Resources\IndividualUserInvestProjectResource;
 use App\MoonShine\Resources\IndividualUserResource;
 use App\MoonShine\Resources\MoonShineUserResource;
 use App\MoonShine\Resources\MoonShineUserRoleResource;
@@ -56,6 +57,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             new CompanyInvestProjectResource(),
             new CompanyInvestOfferResource(),
             new IndividualUserInvestOfferResource(),
+            new IndividualUserInvestProjectResource(),
             new IndividualUserResource(),
 
         ];
@@ -110,20 +112,26 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             ])->canSee(fn() => request()->routeIs('moonshine.*')),
 
             MenuGroup::make('Юрлицо', [
-                MenuItem::make('Компании', fn () => route('company.index',
+                MenuItem::make('Компании', fn () => route(
+                    'company.index',
                     parameters: auth()->user()->getAttribute('name'))),
-                MenuItem::make('Инвестиционные проекты', fn () => route('company.invest.projects.index',
+                MenuItem::make('Инвестиционные проекты', fn () => route(
+                    'company.invest.projects.index',
                     parameters: auth()->user()->getAttribute('name'))),
-                MenuItem::make('Инвестиционные предложения', fn () => route('company.invest.offers.index',
+                MenuItem::make('Инвестиционные предложения', fn () => route(
+                    'company.invest.offers.index',
                     parameters: auth()->user()->getAttribute('name'))),
             ])->canSee(fn() => !request()->routeIs('moonshine.*')),
 
             MenuGroup::make('Физлицо', [
-                MenuItem::make('Профиль', fn () => route('individual.index',
+                MenuItem::make('Профиль', fn () => route(
+                    'individual.index',
                     parameters: auth()->user()->getAttribute('name'))),
-                MenuItem::make('Инвестиционнй проект', fn () => route('individual.invest.projects.index',
+                MenuItem::make('Инвестиционнй проект', fn () => route(
+                    'individual.invest.projects.index',
                     parameters: auth()->user()->getAttribute('name'))),
-                MenuItem::make('Инвестиционное предложение', fn () => route('individual.invest.offers.index',
+                MenuItem::make('Инвестиционное предложение', fn () => route(
+                    'individual.invest.offers.index',
                     parameters: auth()->user()->getAttribute('name'))),
             ])->canSee(fn() => !request()->routeIs('moonshine.*')),
         ];

@@ -26,14 +26,17 @@ class IndividualUserInvestProjectController extends MoonShineController
     {
         IndividualUserInvestProject::query()
             ->create($storeRequest->validated());
-        return $this->json('Добавлено');
+        return $this->json('Добавлено',
+            redirect: route(
+                'individual.invest.projects.index',
+                parameters: [
+                    'user' => auth()
+                        ->user()
+                        ->getAttribute('name')
+                ]
+            )
+        );
     }
-
-//    public function edit(): CompanyProfileForm
-//
-//    {
-//        return CompanyProfileForm::make();
-//    }
 
     public function update(
         IndividualUserInvestProject              $individualUserInvestProject,
@@ -47,11 +50,24 @@ class IndividualUserInvestProjectController extends MoonShineController
         return $this->json(message: 'Успешно');
     }
 
-    public function delete(IndividualUserInvestProject $individualUserInvestProject, $user, $id)
+    public function delete(
+        IndividualUserInvestProject $individualUserInvestProject,
+                                    $user,
+                                    $id
+    )
     {
         $individualUserInvestProject->query()
             ->where('id', $id)
             ->delete();
-        return $this->json(message: 'Успешно');
+        return $this->json(message: 'Успешно',
+            redirect: route(
+                'individual.invest.projects.index',
+                parameters: [
+                    'user' => auth()
+                        ->user()
+                        ->getAttribute('name')
+                ]
+            )
+        );
     }
 }

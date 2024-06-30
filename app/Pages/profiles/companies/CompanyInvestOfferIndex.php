@@ -11,12 +11,17 @@ use App\MoonShine\Resources\CompanyInvestProjectResource;
 use App\MoonShine\Resources\UserCompanyResource;
 use Illuminate\Database\Eloquent\Collection;
 use MoonShine\ActionButtons\ActionButton;
+use MoonShine\Components\FormBuilder;
 use MoonShine\Components\TableBuilder;
+use MoonShine\Decorations\Heading;
+use MoonShine\Enums\JsEvent;
+use MoonShine\Fields\Hidden;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Relationships\HasManyThrough;
 use MoonShine\Fields\Text;
 use MoonShine\Pages\Page;
+use MoonShine\Support\AlpineJs;
 use MoonShine\TypeCasts\ModelCast;
 
 //use MoonShine\Pages\Pages;
@@ -78,12 +83,28 @@ class CompanyInvestOfferIndex extends Page
                     )
                         ->icon('heroicons.outline.eye'),
 
-                    actionbutton::make('', fn(CompanyInvestOffer $companyInvestOffer) => route(
+                    ActionButton::make('', fn(CompanyInvestOffer $companyInvestOffer) => route(
                         'company.invest.offers.delete', [
-                        'user' => auth()->user()->getattribute('name'),
-                        'id' => $companyInvestOffer->getkey()])
+                        'user' => auth()->user()->getAttribute('name'),
+                        'id' => $companyInvestOffer->getKey()])
                     )
-                        ->async(method: 'delete')
+                        ->inModal(
+                            'Удалить',
+                            fn(CompanyInvestOffer $companyInvestOffer) => FormBuilder::make(route(
+                                    'company.invest.offers.delete', [
+                                    'user' => auth()->user()->getAttribute('name'),
+                                    'id' => $companyInvestOffer->getKey()])
+                            )->fields([
+                                Hidden::make('_method')->setValue('DELETE'),
+                                Heading::make('Вы уверены?')
+                            ])
+                                ->async(
+                                    asyncEvents: [
+                                        AlpineJs::event(JsEvent::TABLE_UPDATED, 'company-index')
+                                    ]
+                                )
+                                ->submit('Подтвердить', ['class' => 'btn-secondary'])
+                        )
                         ->error()
                         ->icon('heroicons.outline.trash'),
                 ]),

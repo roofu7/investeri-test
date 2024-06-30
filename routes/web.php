@@ -16,7 +16,6 @@ use App\Http\Controllers\profiles\Individual\IndividualUserDetailController;
 use App\Http\Controllers\profiles\Individual\IndividualUserInvestOfferController;
 use App\Http\Controllers\profiles\Individual\IndividualUserInvestOfferDetailsController;
 use App\Http\Controllers\profiles\Individual\IndividualUserInvestProjectController;
-use App\Http\Controllers\profiles\Individual\IndividualUserInvestProjectDetailsController;
 use App\Http\Controllers\profiles\Individual\IndividualUserPassportController;
 use App\Http\Controllers\profiles\investProjects\InvestProjectController;
 use App\Http\Controllers\UserAccountController;
@@ -114,6 +113,7 @@ Route::middleware('auth:web')
         Route::get('create', 'create')->name('create');
         Route::post('store', 'store')->name('store');
         Route::put('update', 'update')->name('update');
+        Route::delete('delete/{id}', 'delete')->name('delete');
     })
     ->controller(IndividualUserPassportController::class)
     ->group(function () {

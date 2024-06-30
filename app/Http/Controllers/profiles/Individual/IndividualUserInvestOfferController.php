@@ -26,7 +26,15 @@ class IndividualUserInvestOfferController extends MoonShineController
     {
         IndividualUserInvestOffer::query()
             ->create($storeRequest->validated());
-        return $this->json('Добавлено');
+        return $this->json('Добавлено',
+            redirect: route(
+                'individual.invest.offers.index',
+                parameters: [
+                    'user' => auth()
+                        ->user()
+                        ->getAttribute('name')
+                ]
+            ));
     }
 
 //    public function edit(): CompanyProfileForm
@@ -56,6 +64,15 @@ class IndividualUserInvestOfferController extends MoonShineController
         $individualUserInvestOffer->query()
             ->where('id', $id)
             ->delete();
-        return $this->json(message: 'Успешно');
+        return $this->json(message: 'Успешно',
+            redirect: route(
+                'individual.invest.offers.index',
+                parameters: [
+                    'user' => auth()
+                        ->user()
+                        ->getAttribute('name')
+                ]
+            )
+        );
     }
 }

@@ -52,7 +52,7 @@ class InvestProjectController extends MoonShineController
     }*/
 
     public function update(
-        CompanyInvestProject                          $companyInvestProject,
+        CompanyInvestProject             $companyInvestProject,
         CompanyInvestProjectStoreRequest $updateRequest,
                                          $id
     )
@@ -63,11 +63,25 @@ class InvestProjectController extends MoonShineController
         return $this->json(message: 'Успешно');
     }
 
-    public function delete(CompanyInvestProject $companyInvestProject, $user, $id)
+    public function delete(
+        CompanyInvestProject $companyInvestProject,
+                             $user,
+                             $id
+    )
     {
         $companyInvestProject->query()
             ->where('id', $id)
             ->delete();
-        return $this->json(message: 'Успешно');
+        return $this->json(
+            message: 'Успешно',
+            redirect: route(
+                'company.invest.projects.index',
+                parameters: [
+                    'user' => auth()
+                        ->user()
+                        ->getAttribute('name')
+                ]
+            )
+        );
     }
 }

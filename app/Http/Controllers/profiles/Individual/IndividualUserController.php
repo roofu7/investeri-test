@@ -13,7 +13,7 @@ class IndividualUserController extends MoonShineController
 {
     public function index(): IndividualUserIndex
     {
-       return IndividualUserIndex::make();
+        return IndividualUserIndex::make();
     }
 
     public function create(): IndividualUserCreate
@@ -35,12 +35,32 @@ class IndividualUserController extends MoonShineController
     public function update(
         IndividualUser              $individualUser,
         IndividualUserUpdateRequest $updateRequest,
-                             $id
+                                    $id
     )
     {
         $individualUser->query()
             ->where('id', $id)
             ->update($updateRequest->validated());
         return $this->json(message: 'Успешно');
+    }
+
+    public function delete(
+        IndividualUser $individualUser,
+                       $user,
+                       $id
+    )
+    {
+        $individualUser->query()
+            ->where('id', $id)
+            ->delete();
+        return $this->json(
+            message: 'Успешно',
+            redirect: route(
+                'individual.index',
+                parameters: [
+                    'user' => auth()->user()->getAttribute('name')
+                ]
+            )
+        );
     }
 }

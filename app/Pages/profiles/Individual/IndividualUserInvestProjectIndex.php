@@ -4,25 +4,27 @@ declare(strict_types=1);
 
 namespace App\Pages\profiles\Individual;
 
-use App\Models\profiles\companies\Company;
-use App\Models\profiles\companies\CompanyContact;
-use App\Models\profiles\companies\CompanyInvestProject;
-use App\Models\profiles\Individual\IndividualUser;
 use App\Models\profiles\Individual\IndividualUserInvestProject;
 use App\Models\User;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
-use JetBrains\PhpStorm\NoReturn;
+use App\MoonShine\Resources\IndividualUserResource;
+use Illuminate\Database\Eloquent\Collection;
 use MoonShine\ActionButtons\ActionButton;
+use MoonShine\Components\FormBuilder;
 use MoonShine\Components\TableBuilder;
-use MoonShine\Decorations\LineBreak;
+use MoonShine\Decorations\Heading;
+use MoonShine\Enums\JsEvent;
+use MoonShine\Fields\Hidden;
 use MoonShine\Fields\ID;
+use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Text;
 use MoonShine\Pages\Page;
+use MoonShine\Support\AlpineJs;
 use MoonShine\TypeCasts\ModelCast;
 
 
+/**
+ *
+ */
 class IndividualUserInvestProjectIndex extends Page
 {
     protected string $layout = 'userprofile';
@@ -45,10 +47,13 @@ class IndividualUserInvestProjectIndex extends Page
 //        dd('ffffff',$r);
 //    }
 
-    public function hasIndividualUserInvestProject(): \Illuminate\Database\Eloquent\Collection
+
+    /**
+     * @return Collection
+     */
+    public function hasIndividualUserInvestProject(): Collection
     {
         return User::find(auth()->id())->individualUserInvestProjects;
-
     }
 
     public function fields(): array
@@ -57,6 +62,10 @@ class IndividualUserInvestProjectIndex extends Page
             ID::make()->sortable()->showOnExport(),
             Text::make('Название', 'name')->showOnExport(),
             Text::make('Краткая информация', 'basic_information')->showOnExport(),
+            BelongsTo::make(
+                'Физлицо',
+                'individualUser',
+                resource: new IndividualUserResource())
         ];
     }
 
@@ -71,27 +80,9 @@ class IndividualUserInvestProjectIndex extends Page
                 ->fields($this->fields())
                 ->cast(ModelCast::make(IndividualUserInvestProject::class))
                 ->buttons([
-                    /*ActionButton::make('заполнить данные', fn(Company $company) => route('company.profile.create',
-                        parameters: ['user' => auth()->user()->getAttribute('name'),
-                            'company' => $company->getKey()
-                        ]))
-                        ->icon('heroicons.outline.pencil')->primary()
-                        ->canSee(fn(Company $company) => !$company->newQuery()->find($company->getKey())
-                            ->companyActualLocation
-                        ),
-
-                    ActionButton::make('редактировать', fn(Company $company) => route('company.profile.create',
-                        parameters: ['user' => auth()->user()->getAttribute('name'),
-                            'company' => $company->getKey()
-                        ]))
-                        ->icon('heroicons.outline.pencil')
-                        ->canSee(fn(Company $company) => !!$company->newQuery()->find($company->getKey())
-                            ->companyActualLocation
-                        ),*/
-
                     actionbutton::make('', fn(IndividualUserInvestProject $individualUserInvestProject) => route
                     (
-                        'individual.invest.projects.details.index',
+                        'individual.invest.projects.index',
                         [
                             'user' => auth()->user()->getattribute('name'),
                             'id' => $individualUserInvestProject->getkey(),
@@ -100,11 +91,28 @@ class IndividualUserInvestProjectIndex extends Page
                     )
                         ->icon('heroicons.outline.eye'),
 
-                    actionbutton::make('', fn(IndividualUserInvestProject $individualUserInvestProject) => route(
-                        'individual.invest.projects.delete',
-                        ['user' => auth()->user()->getattribute('name'), 'id' => $individualUserInvestProject->getkey()])
+                    ActionButton::make('', fn(IndividualUserInvestProject $individualUserInvestProject) => route(
+                        'individual.invest.projects.delete', [
+                        'user' => auth()->user()->getAttribute('name'),
+                        'id' => $individualUserInvestProject->getKey()])
                     )
-                        ->async(method: 'delete')
+                        ->inModal(
+                            'Удалить',
+                            fn(IndividualUserInvestProject $individualUserInvestProject) => FormBuilder::make(route(
+                                    'individual.invest.projects.delete', [
+                                    'user' => auth()->user()->getAttribute('name'),
+                                    'id' => $individualUserInvestProject->getKey()])
+                            )->fields([
+                                Hidden::make('_method')->setValue('DELETE'),
+                                Heading::make('Вы уверены?')
+                            ])
+                                ->async(
+                                    asyncEvents: [
+                                        AlpineJs::event(JsEvent::TABLE_UPDATED, 'individual-index')
+                                    ]
+                                )
+                                ->submit('Подтвердить', ['class' => 'btn-secondary'])
+                        )
                         ->error()
                         ->icon('heroicons.outline.trash'),
                 ]),

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class IndividualUser extends Model
@@ -33,13 +34,13 @@ class IndividualUser extends Model
         return $this->hasOne(IndividualUserAddress::class);
     }
 
-    public function individualUserProject(): HasOne
+    public function individualUserProject(): HasMany
     {
-        return $this->hasOne(IndividualUserInvestProject::class);
+        return $this->hasMany(IndividualUserInvestProject::class);
     }
-    public function individualUserOffer(): HasOne
+    public function individualUserOffer(): HasMany
     {
-        return $this->hasOne(IndividualUserInvestOffer::class);
+        return $this->hasMany(IndividualUserInvestOffer::class);
     }
 
     public function individualUserPassport(): HasOne

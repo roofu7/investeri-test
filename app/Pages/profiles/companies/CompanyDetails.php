@@ -16,7 +16,6 @@ use MoonShine\Components\FormBuilder;
 use MoonShine\Decorations\Block;
 use MoonShine\Decorations\Collapse;
 use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Divider;
 use MoonShine\Decorations\Grid;
 use MoonShine\Fields\Fields;
 use MoonShine\Fields\Hidden;

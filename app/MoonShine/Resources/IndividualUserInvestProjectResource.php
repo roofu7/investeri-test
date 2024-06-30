@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\profiles\Individual\IndividualUser;
+use App\Models\profiles\Individual\IndividualUserInvestProject;
 
 use MoonShine\Resources\ModelResource;
 use MoonShine\Decorations\Block;
@@ -14,13 +14,13 @@ use MoonShine\Fields\Field;
 use MoonShine\Components\MoonShineComponent;
 
 /**
- * @extends ModelResource<IndividualUser>
+ * @extends ModelResource<IndividualUserInvestProject>
  */
-class IndividualUserResource extends ModelResource
+class IndividualUserInvestProjectResource extends ModelResource
 {
-    protected string $model = IndividualUser::class;
-    protected string $column = 'full_name';
-    protected string $title = 'IndividualUser';
+    protected string $model = IndividualUserInvestProject::class;
+
+    protected string $title = 'IndividualUserInvestProject';
 
     /**
      * @return list<MoonShineComponent|Field>
@@ -35,7 +35,7 @@ class IndividualUserResource extends ModelResource
     }
 
     /**
-     * @param IndividualUser $item
+     * @param IndividualUserInvestProject $item
      *
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules

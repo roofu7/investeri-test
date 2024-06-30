@@ -13,6 +13,7 @@ class CompanyInvestOfferController extends MoonShineController
     {
         return CompanyInvestOfferIndex::make();
     }
+
     public function store(
         CompanyInvestOfferStoreRequest $storeRequest
     )
@@ -35,9 +36,9 @@ class CompanyInvestOfferController extends MoonShineController
     }*/
 
     public function update(
-        CompanyInvestOffer                          $companyInvestOffer,
+        CompanyInvestOffer             $companyInvestOffer,
         CompanyInvestOfferStoreRequest $updateRequest,
-                                                      $id
+                                       $id
     )
     {
         $companyInvestOffer->query()
@@ -46,11 +47,24 @@ class CompanyInvestOfferController extends MoonShineController
         return $this->json(message: 'Успешно');
     }
 
-    public function delete(CompanyInvestOffer $companyInvestOffer, $user, $id)
+    public function delete(
+        CompanyInvestOffer $companyInvestOffer,
+                           $user,
+                           $id
+    )
     {
         $companyInvestOffer->query()
             ->where('id', $id)
             ->delete();
-        return $this->json(message: 'Успешно');
+        return $this->json(
+            message: 'Успешно',
+            redirect: route(
+                'company.invest.offers.index',
+                parameters: [
+                    'user' => auth()
+                        ->user()
+                        ->getAttribute('name')
+                ]
+            ));
     }
 }

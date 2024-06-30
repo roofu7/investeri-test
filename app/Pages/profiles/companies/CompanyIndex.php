@@ -9,13 +9,18 @@ use App\MoonShine\Resources\CompanyInvestOfferResource;
 use App\MoonShine\Resources\CompanyInvestProjectResource;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use MoonShine\ActionButtons\ActionButton;
+use MoonShine\Components\FormBuilder;
 use MoonShine\Components\TableBuilder;
+use MoonShine\Decorations\Heading;
 use MoonShine\Decorations\LineBreak;
+use MoonShine\Enums\JsEvent;
+use MoonShine\Fields\Hidden;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Relationships\HasMany;
 use MoonShine\Fields\Relationships\HasOne;
 use MoonShine\Fields\Text;
 use MoonShine\Pages\Page;
+use MoonShine\Support\AlpineJs;
 use MoonShine\TypeCasts\ModelCast;
 
 class CompanyIndex extends Page
@@ -70,6 +75,8 @@ class CompanyIndex extends Page
             LineBreak::make(),
 
             TableBuilder::make()
+                ->name('company-index')
+                ->async()
                 ->items($this->items())
                 ->fields($this->fields())
                 ->cast(ModelCast::make(Company::class))
@@ -90,7 +97,23 @@ class CompanyIndex extends Page
                         'user' => auth()->user()->getAttribute('name'),
                         'id' => $company->getKey()])
                     )
-                        ->async(method: 'DELETE')
+                        ->inModal(
+                            'Удалить',
+                            fn(Company $company) => FormBuilder::make(route(
+                                    'company.delete', [
+                                    'user' => auth()->user()->getAttribute('name'),
+                                    'id' => $company->getKey()])
+                            )->fields([
+                                Hidden::make('_method')->setValue('DELETE'),
+                                Heading::make('Вы уверены?')
+                            ])
+                                ->async(
+                                    asyncEvents: [
+                                        AlpineJs::event(JsEvent::TABLE_UPDATED, 'company-index')
+                                    ]
+                                )
+                                ->submit('Подтвердить', ['class' => 'btn-secondary'])
+                        )
                         ->error()
                         ->icon('heroicons.outline.trash'),
                 ]),

@@ -37,7 +37,17 @@ class CompanyController extends MoonShineController
 
         Company::query()->create($storeRequest->validated());
 
-        return $this->json('Добавлено', redirect: route('company.index', parameters: ['user' => auth()->user()->getAttribute('name')]));
+        return $this->json(
+            'Добавлено',
+            redirect: route(
+                'company.index',
+                parameters: [
+                    'user' => auth()
+                        ->user()
+                        ->getAttribute('name')
+                ]
+            )
+        );
     }
 
     public function edit(): CompanyProfileForm
@@ -58,11 +68,23 @@ class CompanyController extends MoonShineController
         return $this->json(message: 'Успешно');
     }
 
-    public function delete(Company $company, $user, $id)
+    public function delete(
+        Company $company,
+                $user,
+                $id
+    )
     {
         $company->query()
             ->where('id', $id)
             ->delete();
-        return $this->json(message: 'Успешно');
+        return $this->json(
+            message: 'Успешно',
+            redirect: route(
+                'company.index',
+                parameters: [
+                    'user' => auth()->user()->getAttribute('name')
+                ]
+            )
+        );
     }
 }
