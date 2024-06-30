@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Pages\profiles\investProject;
+namespace App\Pages\profiles\companies;
 
 use App\Models\profiles\companies\CompanyInvestProject;
 use App\Models\User;
-use App\MoonShine\Resources\CompanyInvestProjectResource;
 use App\MoonShine\Resources\UserCompanyResource;
 use Illuminate\Database\Eloquent\Collection;
 use MoonShine\ActionButtons\ActionButton;
@@ -17,7 +16,6 @@ use MoonShine\Enums\JsEvent;
 use MoonShine\Fields\Hidden;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Relationships\BelongsTo;
-use MoonShine\Fields\Relationships\HasManyThrough;
 use MoonShine\Fields\Text;
 use MoonShine\Pages\Page;
 use MoonShine\Support\AlpineJs;
@@ -25,13 +23,13 @@ use MoonShine\TypeCasts\ModelCast;
 
 //use MoonShine\Pages\Pages;
 
-class InvestProjectIndex extends Page
+class CompanyInvestProjectIndex extends Page
 {
     protected string $layout = 'userprofile';
 
     public function title(): string
     {
-        return $this->title ?: 'InvestProjectIndex';
+        return $this->title ?: 'CompanyInvestProjectIndex';
     }
 
 
@@ -71,18 +69,12 @@ class InvestProjectIndex extends Page
                 ->buttons([
 
 
-                    actionbutton::make('', fn(CompanyInvestProject $companyInvestProject) => route
-                    (
-                        'company.invest.projects.details.index',
-                        [
+                    actionbutton::make('', fn(CompanyInvestProject $companyInvestProject) => route(
+                        'company.invest.projects.details.index', [
                             'user' => auth()->user()->getattribute('name'),
                             'id' => $companyInvestProject->getkey(),
-                        ]
-                    )
-                    )
-                        ->name('company-index')
-                        ->async()
-                        ->icon('heroicons.outline.eye'),
+                        ])
+                    )->icon('heroicons.outline.eye'),
 
                     ActionButton::make('', fn(CompanyInvestProject $companyInvestProject) => route(
                         'company.invest.projects.delete', [

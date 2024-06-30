@@ -1,28 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\profiles\investProjects;
+namespace App\Http\Controllers\profiles\companies;
 
-use App\Http\Requests\profiles\companies\CompanyStoreRequest;
-use App\Http\Requests\profiles\companies\CompanyUpdateRequest;
 use App\Http\Requests\profiles\InvestProjects\CompanyInvestProjectStoreRequest;
-use App\Models\profiles\companies\Company;
-use App\Models\profiles\companies\CompanyActualLocation;
-use App\Models\profiles\companies\CompanyContact;
 use App\Models\profiles\companies\CompanyInvestProject;
-use App\Models\profiles\companies\CompanyLegalLocation;
-use App\Pages\profiles\companies\CompanyForm;
-use App\Pages\profiles\companies\CompanyIndex;
-use App\Pages\profiles\companies\CompanyProfileForm;
+use App\Pages\profiles\companies\CompanyInvestProjectIndex;
 use App\Pages\profiles\investProject\InvestProjectForm;
-use App\Pages\profiles\investProject\InvestProjectIndex;
-use Illuminate\Http\Request;
 use MoonShine\Http\Controllers\MoonShineController;
 
-class InvestProjectController extends MoonShineController
+class CompanyInvestProjectController extends MoonShineController
 {
-    public function index(): InvestProjectIndex
+    public function index(): CompanyInvestProjectIndex
     {
-        return InvestProjectIndex::make();
+        return CompanyInvestProjectIndex::make();
     }
 
     public function create(): InvestProjectForm

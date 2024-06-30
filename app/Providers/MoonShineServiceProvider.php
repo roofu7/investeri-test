@@ -21,6 +21,7 @@ use App\Pages\profiles\companies\CompanyForm;
 use App\Pages\profiles\companies\CompanyIndex;
 use App\Pages\profiles\companies\CompanyInvestOfferDetails;
 use App\Pages\profiles\companies\CompanyInvestOfferIndex;
+use App\Pages\profiles\companies\CompanyInvestProjectIndex;
 use App\Pages\profiles\companies\CompanyProfile;
 use App\Pages\profiles\companies\CompanyProfileForm;
 use App\Pages\profiles\companies\MultiForm;
@@ -32,7 +33,6 @@ use App\Pages\profiles\Individual\IndividualUserInvestOfferIndex;
 use App\Pages\profiles\Individual\IndividualUserInvestProjectDetails;
 use App\Pages\profiles\Individual\IndividualUserInvestProjectIndex;
 use App\Pages\profiles\investProject\InvestProjectForm;
-use App\Pages\profiles\investProject\InvestProjectIndex;
 use App\Pages\UserProfilePage;
 use Closure;
 use MoonShine\Contracts\Resources\ResourceContract;
@@ -78,7 +78,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             new CompanyInvestOfferIndex(),
             new CompanyInvestOfferDetails(),
             new MultiForm(),
-            new InvestProjectIndex(),
+            new CompanyInvestProjectIndex(),
             new InvestProjectForm(),
             new IndividualUserIndex(),
             new IndividualUserCreate(),

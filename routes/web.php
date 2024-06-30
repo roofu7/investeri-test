@@ -7,6 +7,7 @@ use App\Http\Controllers\profiles\companies\CompanyController;
 use App\Http\Controllers\profiles\companies\CompanyDetailsController;
 use App\Http\Controllers\profiles\companies\CompanyInvestOfferController;
 use App\Http\Controllers\profiles\companies\CompanyInvestOfferDetailsController;
+use App\Http\Controllers\profiles\companies\CompanyInvestProjectController;
 use App\Http\Controllers\profiles\companies\CompanyInvestProjectDetailsController;
 use App\Http\Controllers\profiles\companies\MultiFormController;
 use App\Http\Controllers\profiles\Individual\IndividualUserAddressController;
@@ -17,7 +18,6 @@ use App\Http\Controllers\profiles\Individual\IndividualUserInvestOfferController
 use App\Http\Controllers\profiles\Individual\IndividualUserInvestOfferDetailsController;
 use App\Http\Controllers\profiles\Individual\IndividualUserInvestProjectController;
 use App\Http\Controllers\profiles\Individual\IndividualUserPassportController;
-use App\Http\Controllers\profiles\investProjects\InvestProjectController;
 use App\Http\Controllers\UserAccountController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -62,8 +62,8 @@ Route::middleware('auth:web')
     /*------------------------------------------ Company Invest Project ----------------------------------------------*/
     ->prefix('personal-account/{user}/company/invest-projects')
     ->name('company.invest.projects.')
-    ->namespace('App\Http\Controllers\profiles\investProjects')
-    ->controller(InvestProjectController::class)
+    ->namespace('App\Http\Controllers\profiles\companies')
+    ->controller(CompanyInvestProjectController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('create', 'create')->name('create');
