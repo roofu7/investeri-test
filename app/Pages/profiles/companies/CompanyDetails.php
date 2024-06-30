@@ -22,6 +22,7 @@ use MoonShine\Fields\Hidden;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\Textarea;
+use MoonShine\Fields\TinyMce;
 use MoonShine\Pages\Page;
 use MoonShine\TypeCasts\ModelCast;
 
@@ -165,7 +166,8 @@ class CompanyDetails extends Page
         return [
             ID::make()->sortable()->showOnExport(),
             Text::make('Название', 'name')->required()->showOnExport(),
-            Textarea::make('Краткая информация', 'basic_information')->required()->showOnExport(),
+            TinyMce::make('Краткая информация', 'basic_information')->required()->showOnExport(),
+//            Textarea::make('Краткая информация', 'basic_information')->required()->showOnExport(),
             Hidden::make('company_id')->setValue(request('id'))->required()->showOnExport(),
         ];
     }

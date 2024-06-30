@@ -2,7 +2,6 @@
 
 namespace App\Forms;
 
-use MoonShine\ActionButtons\ActionButton;
 use MoonShine\Components\FormBuilder;
 use MoonShine\Fields\Email;
 use MoonShine\Fields\Password;
