@@ -19,8 +19,14 @@ use App\Http\Controllers\profiles\Individual\IndividualUserInvestOfferDetailsCon
 use App\Http\Controllers\profiles\Individual\IndividualUserInvestProjectController;
 use App\Http\Controllers\profiles\Individual\IndividualUserPassportController;
 use App\Http\Controllers\UserAccountController;
+use App\Http\Controllers\YooKassaController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+
+Route::post('/yookassa/create-payment/', [YooKassaController::class, 'createPayment'])->name('yookassa.create-payment');
+Route::get('/yookassa/success', [YooKassaController::class, 'handleSuccess'])->name('yookassa.success');
+Route::post('/yookassa/handle-notification', [YooKassaController::class, 'handleNotification'])->name('yookassa.handle-notification');
+
 
 Route::get('/', [PageController::class, 'getPages'])->name('home');
 
