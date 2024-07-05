@@ -32,7 +32,7 @@ class CompanyStoreRequest extends  MoonShineFormRequest
                 'required',
                 'unique:companies',
                 'string',
-                'min:12',
+                'min:10',
                 'max:12',
             ],
             'ogrn' => [
