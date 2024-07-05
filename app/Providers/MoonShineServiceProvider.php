@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\MoonShine\Pages\Users\UsersList;
 use App\MoonShine\Resources\CompanyActualLocationResource;
 use App\MoonShine\Resources\CompanyContactResource;
 use App\MoonShine\Resources\CompanyInvestOfferResource;
@@ -106,6 +107,9 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
                     new MoonShineUserRoleResource()
                 ),
             ])->canSee(fn() => request()->routeIs('moonshine.*')),
+
+            MenuItem::make('Пользователи', new UsersList())
+                ->canSee(fn() => request()->routeIs('moonshine.*')),
 
             MenuGroup::make('Страницы', [
                 MenuItem::make('Создать страницу', new PageResource()),
