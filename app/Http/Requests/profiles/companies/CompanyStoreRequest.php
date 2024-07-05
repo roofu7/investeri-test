@@ -40,7 +40,7 @@ class CompanyStoreRequest extends  MoonShineFormRequest
                 'unique:companies',
                 'string',
                 'min:13',
-                'max:13',
+                'max:15',
             ],
             'user_id' => [
                 'required',
