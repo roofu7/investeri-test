@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\MoonShine\Pages\Users\UserDetails;
 use App\MoonShine\Pages\Users\UsersList;
 use App\MoonShine\Resources\CompanyActualLocationResource;
 use App\MoonShine\Resources\CompanyContactResource;
@@ -71,6 +72,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
     {
         return [
             new UsersList(),
+            new UserDetails(),
             new UserProfilePage(),
             new CompanyIndex(),
             new CompanyForm(),

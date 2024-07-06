@@ -11,6 +11,7 @@ use App\MoonShine\Resources\UserCompanyResource;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use LaravelIdea\Helper\App\Models\_IH_User_C;
 use MoonShine\ActionButtons\ActionButton;
+use MoonShine\Components\CardsBuilder;
 use MoonShine\Components\MoonShineComponent;
 use MoonShine\Components\TableBuilder;
 use MoonShine\Fields\ID;
@@ -20,7 +21,7 @@ use MoonShine\Fields\Text;
 use MoonShine\Pages\Page;
 use MoonShine\TypeCasts\ModelCast;
 
-class UsersList extends Page
+class UserDetails extends Page
 {
     /**
      * @return array<string, string>
@@ -34,12 +35,17 @@ class UsersList extends Page
 
     public function title(): string
     {
-        return $this->title ?: 'UsersList';
+        return $this->title ?: 'UserDetails';
     }
 
-    public function users(): LengthAwarePaginator|array|\Illuminate\Pagination\LengthAwarePaginator|_IH_User_C
+    public function requestId(): bool
     {
-        return User::query()->paginate();
+        return request()->filled('id');
+    }
+
+    public function userDetails()
+    {
+        return User::find(request());
     }
 
     public function fields(): array
@@ -77,20 +83,10 @@ class UsersList extends Page
     public function components(): array
     {
         return [
-            TableBuilder::make()
-                ->items($this->users())
+            CardsBuilder::make()
+                ->items($this->userDetails())
                 ->fields($this->fields())
                 ->cast(ModelCast::make(User::class))
-                ->buttons([
-                    ActionButton::make('подробно',
-                        fn(User $user) => to_page(
-                            new UserDetails(),
-                            params: ['id' => $user->getKey(),]
-                        )
-                    )
-                        ->icon('heroicons.outline.eye')
-                        ->primary(),
-                ]),
         ];
     }
 }
