@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\MoonShine\Pages\Users;
 
 use App\Models\User;
+use App\MoonShine\Resources\CompanyInvestOfferResource;
 use App\MoonShine\Resources\CompanyInvestProjectResource;
+use App\MoonShine\Resources\UserCompanyResource;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use LaravelIdea\Helper\App\Models\_IH_User_C;
 use MoonShine\Components\MoonShineComponent;
@@ -44,12 +46,26 @@ class UsersList extends Page
         return [
             ID::make(),
             Text::make('Имя', 'name'),
+            HasMany::make(
+                'Компания',
+                'companyForm',
+                resource: new UserCompanyResource())
+                ->fields([
+                    Text::make('Название Компании', 'name')
+                ]),
             HasManyThrough::make(
                 'Инвестиционный проект',
                 'companyInvestProjects',
                 resource: new CompanyInvestProjectResource())
                 ->fields([
-                    Text::make('Название', 'name')
+                    Text::make('Название проекта', 'name')
+                ]),
+            HasManyThrough::make(
+                'Инвестиционное предложение',
+                'companyInvestOffers',
+                resource: new CompanyInvestOfferResource())
+                ->fields([
+                    Text::make('Название проекта', 'name')
                 ]),
         ];
     }
