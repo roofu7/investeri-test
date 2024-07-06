@@ -70,6 +70,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
     protected function pages(): array
     {
         return [
+            new UsersList(),
             new UserProfilePage(),
             new CompanyIndex(),
             new CompanyForm(),
