@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\MoonShine\Pages\Users;
 
 use App\Models\User;
+use App\MoonShine\Resources\CompanyInvestProjectResource;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use LaravelIdea\Helper\App\Models\_IH_User_C;
 use MoonShine\Components\MoonShineComponent;
 use MoonShine\Components\TableBuilder;
 use MoonShine\Fields\ID;
+use MoonShine\Fields\Relationships\HasMany;
+use MoonShine\Fields\Relationships\HasManyThrough;
 use MoonShine\Fields\Text;
 use MoonShine\Pages\Page;
 use MoonShine\TypeCasts\ModelCast;
@@ -40,7 +43,14 @@ class UsersList extends Page
     {
         return [
             ID::make(),
-            Text::make('Имя', 'name')
+            Text::make('Имя', 'name'),
+            HasManyThrough::make(
+                'Инвестиционный проект',
+                'companyInvestProjects',
+                resource: new CompanyInvestProjectResource())
+                ->fields([
+                    Text::make('Название', 'name')
+                ]),
         ];
     }
 
