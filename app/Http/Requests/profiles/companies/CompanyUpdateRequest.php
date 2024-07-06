@@ -31,13 +31,13 @@ class CompanyUpdateRequest extends MoonshineFormRequest
                 'required',
                 'string',
                 'min:10',
-                'max:10',
+                'max:12',
             ],
             'ogrn' => [
                 'required',
                 'string',
                 'min:13',
-                'max:13',
+                'max:15',
             ],
         ];
     }

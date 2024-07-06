@@ -31,7 +31,7 @@ class IndividualUserUpdateRequest extends  MoonShineFormRequest
             'inn' => [
                 'required',
                 'string',
-                'min:12',
+                'min:10',
                 'max:12',
             ],
         ];
