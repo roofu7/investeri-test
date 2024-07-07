@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Http\Controllers\YooKassaController;
 use Mockery;
+use Mockery\MockInterface;
 use Tests\TestCase;
 use YooKassa\Client;
 use YooKassa\Model\Notification\NotificationSucceeded;
@@ -12,6 +13,33 @@ use YooKassa\Model\Payment\PaymentStatus;
 
 class YookassaTest extends TestCase
 {
+    public function testGetClient()
+    {
+        $this->withoutExceptionHandling();
+
+        /*$client = $this->instance(
+            Client::class,
+            Mockery::mock(Client::class, function (MockInterface $mock) {
+                $mock->shouldReceive('setAuth')
+                    ->with(
+                        config('services.yookassa.shop_id'),
+                        config('services.yookassa.secret_key')
+                    )->once();
+            })
+        );*/
+
+        $client = Mockery::mock(Client::class);
+        $client->shouldReceive('setAuth')
+            ->with(
+                config('services.yookassa.shop_id'),
+                config('services.yookassa.secret_key')
+            )
+            ->andReturn($client);
+
+        $this->app->instance(Client::class, $client);
+
+        $this->assertTrue((bool)$client);
+    }
 
     public function testCreatePayment()
     {
@@ -41,6 +69,7 @@ class YookassaTest extends TestCase
                 config('services.yookassa.shop_id'),
                 config('services.yookassa.secret_key')
             )
+//            ->andReturn()
             ->once();
 
         $payment = Mockery::mock(PaymentInterface::class);

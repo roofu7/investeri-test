@@ -8,12 +8,14 @@ use App\Models\User;
 use App\MoonShine\Resources\CompanyInvestOfferResource;
 use App\MoonShine\Resources\CompanyInvestProjectResource;
 use App\MoonShine\Resources\UserCompanyResource;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use LaravelIdea\Helper\App\Models\_IH_User_C;
-use MoonShine\ActionButtons\ActionButton;
+use MoonShine\Components\Badge;
+use MoonShine\Components\Card;
 use MoonShine\Components\CardsBuilder;
 use MoonShine\Components\MoonShineComponent;
 use MoonShine\Components\TableBuilder;
+use MoonShine\Decorations\Block;
+use MoonShine\Decorations\Column;
+use MoonShine\Decorations\Grid;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Relationships\HasMany;
 use MoonShine\Fields\Relationships\HasManyThrough;
@@ -48,11 +50,54 @@ class UserDetails extends Page
         return User::find(request());
     }
 
-    public function fields(): array
+    public function fieldsUser(): array
     {
         return [
             ID::make(),
             Text::make('Имя', 'name'),
+            Text::make('Почта', 'email'),
+            Text::make('Дата регистрации', 'created_at')
+        ];
+    }
+
+    public function fieldsCompany(): array
+    {
+        return [
+            HasMany::make(
+                'Название',
+                'companyForm',
+                resource: new UserCompanyResource())
+                ->fields([
+                    Text::make('', 'name'),
+                ]),
+            HasMany::make(
+                'ИНН',
+                'companyForm',
+                resource: new UserCompanyResource())
+                ->fields([
+                    Text::make('', 'inn'),
+                ]),
+            HasMany::make(
+                'ОГРН',
+                'companyForm',
+                resource: new UserCompanyResource())
+                ->fields([
+                    Text::make('', 'ogrn'),
+//                    Text::make('Дата создания', 'created_at')
+                ]),
+            HasMany::make(
+                'Дата создания',
+                'companyForm',
+                resource: new UserCompanyResource())
+                ->fields([
+                    Text::make('', 'created_at')
+                ]),
+        ];
+    }
+
+    /*public function fields(): array
+    {
+        return [
             HasMany::make(
                 'Компания',
                 'companyForm',
@@ -75,7 +120,7 @@ class UserDetails extends Page
                     Text::make('Название проекта', 'name')
                 ]),
         ];
-    }
+    }*/
 
     /**
      * @return MoonShineComponent
@@ -83,10 +128,20 @@ class UserDetails extends Page
     public function components(): array
     {
         return [
-            CardsBuilder::make()
+            TableBuilder::make()
                 ->items($this->userDetails())
-                ->fields($this->fields())
-                ->cast(ModelCast::make(User::class))
+                ->fields($this->fieldsUser())
+                ->cast(ModelCast::make(User::class)),
+
+            Block::make('Компании', [
+                CardsBuilder::make()
+                    ->columnSpan(6)
+                    ->items($this->userDetails())
+                    ->fields($this->fieldsCompany())
+                    ->cast(ModelCast::make(User::class))
+                    ->header(static fn() => Badge::make('new', 'success'))
+                    ->title('title')
+            ]),
         ];
     }
 }
