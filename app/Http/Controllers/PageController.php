@@ -14,6 +14,7 @@ class PageController extends Controller
 {
     public function getPages()
     {
+        return view('main');
         return view('home');
     }
 }

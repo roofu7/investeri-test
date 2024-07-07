@@ -1,0 +1,19 @@
+.project-card-list {
+    &_grid_base {
+        position: relative;
+        display: grid;
+        gap: 22px;
+        @media (min-width: $min-md) {
+            grid-template-columns: 1fr 1fr;
+        }
+        @media (min-width: $min-lg) {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .no-projects-msg {
+            position: absolute;
+            left: 0;
+            bottom: calc(100% + 20px);
+        }
+    }
+}

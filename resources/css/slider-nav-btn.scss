@@ -1,0 +1,33 @@
+.slider-nav-btn {
+  &_theme_base {
+    background-color: rgba(47, 65, 75, 0.5);
+
+    &::after {
+      width: 72%;
+      height: 72%;
+      content: '';
+      @include bgImg('../images/slider-nav-next.svg');
+    }
+
+    @media (min-width: $min-lg) {
+      width: 78px;
+      height: 88px;
+
+      &::after {
+        width: 59px;
+        height: 69px;
+      }
+    }
+
+    @media (max-width: $max-lg) {
+      width: 50px;
+      height: 48px;
+    }
+  }
+
+  &_prev {
+    &::after {
+      rotate: 180deg;
+    }
+  }
+}

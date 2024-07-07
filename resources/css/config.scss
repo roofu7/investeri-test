@@ -1,0 +1,43 @@
+$min-sm: 576px;
+$min-md: 768px;
+$min-lg: 992px;
+$min-xl: 1200px;
+$min-xxl: 1400px;
+$min-xxxl: 1600px;
+
+$max-xxxl: 1599px;
+$max-xxl: 1399px;
+$max-xl: 1199px;
+$max-lg: 991px;
+$max-md: 767px;
+$max-sm: 575px;
+
+@mixin bgImg($url, $position: center, $size: contain) {
+  background-image: url($url);
+  background-repeat: no-repeat;
+  background-position: $position;
+  background-size: $size;
+}
+
+:root {
+  --mainBgColor: #26343C;
+  --mainTextColor: #fff;
+  --accentColor: #0089D7;
+  --containerWidth: 1170px;
+  --containerWidthXl: 1708px;
+  --containerPadding: 10px;
+  --containerInvertPadding: calc(var(--containerPadding) * (-1));
+  --containerWidthWithPaddings: calc(var(--containerWidth) + var(--containerPadding) * 2);
+  --textLineHeight: 1.2;
+  --content-font-width: 500;
+  --content-line-height: 1.2;
+
+  @media (min-width: $min-lg) {
+    --content-font-size: 20px;
+  }
+
+  @media (max-width: $max-lg) {
+    --content-font-size: 16px;
+  }
+}
+
