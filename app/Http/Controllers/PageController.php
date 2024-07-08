@@ -15,7 +15,6 @@ class PageController extends Controller
      */
     public function getPages(Request $request)
     {
-        /** @var TYPE_NAME $request */
         return $request->path() == '/'
             ? view('main')
             : view($request->path());
