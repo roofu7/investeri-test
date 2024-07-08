@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CardProjectController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\profiles\companies\CompanyActualLocationController;
 use App\Http\Controllers\profiles\companies\CompanyContactController;
@@ -27,11 +28,18 @@ Route::post('/yookassa/create-payment/', [YooKassaController::class, 'createPaym
 Route::get('/yookassa/success', [YooKassaController::class, 'handleSuccess'])->name('yookassa.success');
 Route::post('/yookassa/handle-notification', [YooKassaController::class, 'handleNotification'])->name('yookassa.handle-notification');
 
+Route::controller(PageController::class)
+    ->group(function () {
+        Route::get('/', 'getPages')->name('home');
+        Route::get('/projects', 'getPages')->name('projects');
+    });
 
-Route::get('/', [PageController::class, 'getPages'])->name('home');
 
 Route::get('personal-account/{user}', [UserAccountController::class, 'index'])->middleware('auth:web')->name('userinfo');
 Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth:web')->name('logout');
+
+/*---------------------------------------------- Invest Project Card -------------------------------------------------*/
+Route::get('name', [CardProjectController::class, 'getCompany'])->name('getCompany');
 
 Route::middleware('auth:web')
     ->prefix('personal-account/{user}/companies')
@@ -64,7 +72,6 @@ Route::middleware('auth:web')
     ->group(function () {
         Route::get('details/{id}', 'index')->name('details.index');
     })
-
     /*------------------------------------------ Company Invest Project ----------------------------------------------*/
     ->prefix('personal-account/{user}/company/invest-projects')
     ->name('company.invest.projects.')
@@ -77,7 +84,6 @@ Route::middleware('auth:web')
         Route::put('update', 'update')->name('update');
         Route::delete('{id}', 'delete')->name('delete');
     })
-
     /*------------------------------------------ Company Investment Offer ----------------------------------------------*/
     ->prefix('personal-account/{user}/company/invest-offers')
     ->name('company.invest.offers.')
@@ -90,7 +96,6 @@ Route::middleware('auth:web')
         Route::put('update', 'update')->name('update');
         Route::delete('{id}', 'delete')->name('delete');
     })
-
     /*-------------------------------------- Company Invest Offer Details ------------------------------------------*/
     ->prefix('personal-account/{user}/company/invest-offers/details/{id}')
     ->name('company.invest.offers.details.')
@@ -99,7 +104,6 @@ Route::middleware('auth:web')
     ->group(function () {
         Route::get('/', 'index')->name('index');
     })
-
     /*-------------------------------------- Company Invest Project Details ------------------------------------------*/
     ->prefix('personal-account/{user}/company/invest-projects/details/{id}')
     ->name('company.invest.projects.details.')
@@ -108,7 +112,6 @@ Route::middleware('auth:web')
     ->group(function () {
         Route::get('/', 'index')->name('index');
     })
-
     /*------------------------------------------------ Individual ----------------------------------------------------*/
     ->prefix('personal-account/{user}/individual')
     ->name('individual.')
@@ -151,7 +154,6 @@ Route::middleware('auth:web')
         Route::put('update', 'update')->name('update');
         Route::delete('{id}', 'delete')->name('delete');
     })
-
     ->prefix('personal-account/{user}/individual/invest-offers')
     ->name('individual.invest.offers.')
     ->namespace('App\Http\Controllers\profiles\Individual')
@@ -163,15 +165,13 @@ Route::middleware('auth:web')
         Route::put('update', 'update')->name('update');
         Route::delete('{id}', 'delete')->name('delete');
     })
-
     ->prefix('personal-account/{user}/individual/invest-offers/details/{id}')
     ->name('individual.invest.offers.details.')
     ->namespace('App\Http\Controllers\profiles\Individual')
     ->controller(IndividualUserInvestOfferDetailsController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
-    })
-;
+    });
 
 
 
