@@ -2,108 +2,121 @@
 @import "project-card";
 @import "project-card-list";
 
+//.ball-bg {
+//    position: absolute;
+//    //z-index: -1;
+//    content: "";
+//    height: 440px;
+//    width: 440px;
+//    background-image: url('../images/ball_big.svg');
+//    background-repeat: no-repeat;
+//    background-position: center;
+//    background-size: 440px;
+//    pointer-events: none;
+//}
+
 .reviews-slider {
 
-  &_theme_base {
-    .review-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+    &_theme_base {
+        .review-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
 
-      &__avatar {
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+            &__avatar {
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+
+            &__name {
+                margin-top: 1em;
+                font-weight: 700;
+                text-align: center;
+            }
+
+            &__user-review {
+                position: relative;
+                font-weight: var(--content-font-width);
+                font-size: var(--content-font-size);
+                line-height: var(--content-line-height);
+                color: #fff;
+                min-height: 5em;
+                text-align: center;
+                padding-right: 3em;
+                padding-left: 3em;
+                line-height: 1.2;
+                text-wrap: balance;
+
+                &::before,
+                &::after {
+                    position: absolute;
+                    width: 36px;
+                    height: 29px;
+                    top: -0.7em;
+                    content: '';
+                    @include bgImg('../images/review-quote_begin.svg')
+                }
+
+                &::before {
+                    left: 0;
+                }
+
+                &::after {
+                    right: 0;
+                    scale: -1 1;
+                }
+            }
+
+            @media (min-width: $min-lg) {
+                padding-right: 90px;
+                padding-left: 90px;
+                &__avatar {
+                    --elemSize: 176px;
+                }
+
+                &__name {
+                    font-size: 20px;
+                }
+
+                &__user-review-block {
+                    max-width: 700px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    margin-top: 60px;
+                }
+
+            }
+
+            @media (max-width: $max-lg) {
+                padding-right: 20px;
+                padding-left: 20px;
+
+                &__avatar {
+                    --elemSize: 130px;
+                }
+
+                &__name {
+                    font-size: 16px;
+                }
+
+                &__user-review {
+                    padding-right: 1em;
+                    padding-left: 1em;
+
+                    &::before,
+                    &::after {
+                        top: -0.9em;
+                    }
+                }
+
+                &__user-review-block {
+                    margin-top: 30px;
+                }
+            }
         }
-      }
-
-      &__name {
-        margin-top: 1em;
-        font-weight: 700;
-        text-align: center;
-      }
-
-      &__user-review {
-        position: relative;
-        font-weight: var(--content-font-width);
-        font-size: var(--content-font-size);
-        line-height: var(--content-line-height);
-        color: #fff;
-        min-height: 5em;
-        text-align: center;
-        padding-right: 3em;
-        padding-left: 3em;
-        line-height: 1.2;
-        text-wrap: balance;
-
-        &::before,
-        &::after {
-          position: absolute;
-          width: 36px;
-          height: 29px;
-          top: -0.7em;
-          content: '';
-          @include bgImg('../images/review-quote_begin.svg')
-        }
-
-        &::before {
-          left: 0;
-        }
-
-        &::after {
-          right: 0;
-          scale: -1 1;
-        }
-      }
-
-      @media (min-width: $min-lg) {
-        padding-right: 90px;
-        padding-left: 90px;
-        &__avatar {
-          --elemSize: 176px;
-        }
-
-        &__name {
-          font-size: 20px;
-        }
-
-        &__user-review-block {
-          max-width: 700px;
-          margin-left: auto;
-          margin-right: auto;
-          margin-top: 60px;
-        }
-
-      }
-
-      @media (max-width: $max-lg) {
-        padding-right: 20px;
-        padding-left: 20px;
-
-        &__avatar {
-          --elemSize: 130px;
-        }
-
-        &__name {
-          font-size: 16px;
-        }
-
-        &__user-review {
-          padding-right: 1em;
-          padding-left: 1em;
-
-          &::before,
-          &::after {
-            top: -0.9em;
-          }
-        }
-
-        &__user-review-block {
-          margin-top: 30px;
-        }
-      }
     }
-  }
 }

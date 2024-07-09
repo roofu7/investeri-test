@@ -52,8 +52,8 @@
         <button class="show-main-nav page-header__open-nav"></button>
     </div>
 </header>
-<h1>Я сделал новые правки</h1>
-<div class="page-main index-main">
+
+<div class="page-main projects-main">
 
     <div class="intro-banner">
         <div class="intro-banner__inner">
@@ -70,29 +70,50 @@
             </div>
         </div>
     </div>
-
-    <section class="base-section intro-description-section">
-        <div class="container">
-            <div class="base-section__head">
-                <h2 class="section-title section-title_centered">
-                    Заголовок второго уровня. Одна-две строки
-                </h2>
-            </div>
-            <div class="gen-block gen-block_on-plate gen-block_text-centered base-section__body">
-                Позвольте нам взять под своё крыло финансирование вашего предприятия, чтобы вы могли свободно заниматься
-                расширением и достижением новых пиков успешности.
-            </div>
-        </div>
-    </section>
-
+    <!-- projects-review-section_one-row если карточки будут в один ряд на десктопе -->
     <div class="projects-review-section">
         <div class="base-section__body projects-review-section__body container">
-            <a href="#" class="ind-link ind-link_theme_next projects-review-section__more-link">Посмотреть все кейсы</a>
 
             <div class="project-card-list project-card-list_grid_base projects-review-section__project-card-items">
-
+@for ($i = 0; $i < 6; $i++)
+                    <article class="project-card project-card_theme_normal project-cards-section__project-card-item">
+                        <div class="project-card__fig">
+                            <a class="project-card__card-link" href="#"></a>
+                            <img class="project-card__fig-img" src="assets/banner1-DQxjRDzc.jpg" alt="">
+                            <div class="person-avatar person-avatar_theme_circle project-card__label">
+                                <img src="assets/banner2-BC5FGtnE.jpg" alt="">
+                            </div>
+                            <div class="project-card__badge">Елена</div>
+                        </div>
+                        <div class="project-card__main">
+                            <div class="project-card__title">
+                                <a href="#">ООО АВрора</a>
+                            </div>
+                            <div class="project-card__desc">выгодные под 10 процентов</div>
+                            <div class="project-card__location">МСК</div>
+                            <div class="project-card__goal-info">
+                                {{--<div class="project-card__goal-info-labels">
+                                    <div class="project-card__goal-info-label project-card__goal-info-label_min">мин.
+                                        цель:<br>1000р.
+                                    </div>
+                                    <div class="project-card__goal-info-label project-card__goal-info-label_max">макс.
+                                        цель:<br>10000р.
+                                    </div>
+                                </div>
+                                <div class="project-card__goal-info-progress progress-block progress-block_theme_l">
+                                    <div class="progress-block__level" style="width: 30%"></div>
+                                    <div class="progress-block__number-value">30%</div>
+                                </div>--}}
+                                <div class="project-card__goal-info-remains">
+                                    осталось дней 150
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="project-card__action">инвестировать сейчас</a>
+                    </article>
+                @endfor
                 @foreach( $company as $companies )
-                    @if( $loop->index == 3 )
+                    @if( true )
                         @break
                     @endif
                     <article class="project-card project-card_theme_normal project-cards-section__project-card-item">
@@ -133,104 +154,33 @@
                 @endforeach
 
             </div>
-
-        </div>
-    </div>
-
-    <section class="base-section base-promises-section" style="--animation-duration: 1.1s;">
-        <div class="base-section__head container">
-            <h2 class="section-title section-title_centered workflow-section__title">
-                Заголовок второго уровня. Одна-две строки
-            </h2>
-        </div>
-        <div class="base-section__body base-promises-section__inner">
-            <div class="base-promises-section__items container">
-                <div class="gen-block gen-block_on-plate base-promises-section__item base-promises-section__first-item">
-                    Получите инструменты и практические советы, необходимые для получения средств. Мы поможем вам
-                    закрыть финансирование и перейти к перспективам развития вашего бизнеса.
-                </div>
-                <div class="gen-block gen-block_on-plate base-promises-section__item base-promises-section__last-item">
-                    Оперативно рассмотрим вашу заявку. Более 700 крупных инвесторов ждут вашего проекта.
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="base-section suggested-projects-section">
-        <div class="base-section__head suggested-projects-section__head container">
-            <h2 class="section-title section-title_centered suggested-projects-section__title">
-                Рекомендуемые компании
-            </h2>
-        </div>
-        <div class="base-section__body suggested-projects-section__body container">
-            <div class="project-card-list project-card-list_grid_base suggested-projects-section__project-card-items">
-
-                @foreach( $company as $companies )
-                    @if( $loop->index == 3 )
-                        @break
-                    @endif
-                    <article class="project-card project-card_theme_normal project-cards-section__project-card-item">
-                        <div class="project-card__fig">
-                            <a class="project-card__card-link" href="#"></a>
-                            <img class="project-card__fig-img" src="assets/banner1-DQxjRDzc.jpg" alt="">
-                            <div class="person-avatar person-avatar_theme_circle project-card__label">
-                                <img src="assets/banner2-BC5FGtnE.jpg" alt="">
-                            </div>
-                            <div class="project-card__badge">Елена</div>
-                        </div>
-                        <div class="project-card__main">
-                            <div class="project-card__title">
-                                <a href="#">{{ $companies->name }}</a>
-                            </div>
-                            <div class="project-card__desc">выгодные под 10 процентов</div>
-                            <div class="project-card__location">МСК</div>
-                            <div class="project-card__goal-info">
-                                <div class="project-card__goal-info-labels">
-                                    <div class="project-card__goal-info-label project-card__goal-info-label_min">мин.
-                                        цель:<br>1000р.
-                                    </div>
-                                    <div class="project-card__goal-info-label project-card__goal-info-label_max">макс.
-                                        цель:<br>10000р.
-                                    </div>
-                                </div>
-                                <div class="project-card__goal-info-progress progress-block progress-block_theme_l">
-                                    <div class="progress-block__level" style="width: 30%"></div>
-                                    <div class="progress-block__number-value">30%</div>
-                                </div>
-                                <div class="project-card__goal-info-remains">
-                                    осталось дней 150
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#" class="project-card__action">инвестировать сейчас</a>
-                    </article>
-                @endforeach
-
-
+            <div class="projects-review-section__pagination">
+                <ul class="pagination paginator">
+                    <li>
+                        <a class="paginator__control paginator__first" href='http://www.investeri.ru/list/?page=2'>Начало</a>
+                    </li>
+                    <li>
+                        <a class="paginator__control paginator__prev" href='http://www.investeri.ru/list/?page=3'>Пред.</a>
+                    </li>
+                    <li class="active">
+                        <a class="paginator__control paginator__page-number" href='#'>1</a>
+                    </li>
+                    <li>
+                        <a class="paginator__control paginator__page-number" href='http://www.investeri.ru/list/?page=2'>2</a>
+                    </li>
+                    <li>
+                        <a class="paginator__control paginator__page-number" href='http://www.investeri.ru/list/?page=3'>3</a>
+                    </li>
+                    <li>
+                        <a class="paginator__control paginator__next" href='http://www.investeri.ru/list/?page=2'>След.</a>
+                    </li>
+                    <li>
+                        <a class="paginator__control paginator__last" href='http://www.investeri.ru/list/?page=3'>Последняя</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
-
-    <section class="base-section workflow-section">
-        <div class="base-section__head workflow-section__head container">
-            <h2 class="section-title section-title_centered workflow-section__title">
-                Как это работает
-            </h2>
-        </div>
-        <div class="base-section__body workflow-section__body container">
-            <ol class="workflow-section__steps">
-                <li class="workflow-section__step workflow-section__step_1">
-                    Зарегистрируйтесь
-                </li>
-                <li class="workflow-section__step workflow-section__step_2">
-                    Загрузите документы,пройдите верификацию и предоставьте свой бизнес-план.
-                </li>
-                <li class="workflow-section__step workflow-section__step_3">
-                    Быстро получите финансирование
-                </li>
-            </ol>
-        </div>
-    </section>
 
     <div class="reviews-section">
         <div class="reviews-section__slider-block">
@@ -305,7 +255,6 @@
                 class="swiper-button-next slider-nav-btn slider-nav-btn_next slider-nav-btn_theme_base reviews-section__slider-nav reviews-section__slider-nav_next"></div>
         </div>
     </div>
-
 
 </div>
 <footer class="page-footer">

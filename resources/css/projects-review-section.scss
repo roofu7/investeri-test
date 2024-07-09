@@ -9,9 +9,9 @@
     }
 
     @media (min-width: $min-lg) {
-        &__body {
-            margin-top: 110px;
-        }
+        //&__body {
+        //    margin-top: 110px;
+        //}
 
         &__desc {
             max-width: 50ch;
@@ -19,11 +19,19 @@
             margin-left: auto;
             text-align: center;
         }
+
+        &__pagination {
+            margin-top: 55px;
+        }
     }
 
     @media (max-width: $max-lg) {
         &__body {
             margin-top: 60px;
+        }
+
+        &__pagination {
+            margin-top: 20px;
         }
     }
 }

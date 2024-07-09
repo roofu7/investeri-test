@@ -1,105 +1,105 @@
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  margin: 0;
-  color: var(--mainTextColor);
-  background-color: var(--mainBgColor);
-  font-family: 'Montserrat', sans-serif;
-  font-optical-sizing: auto;
-  line-height: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    color: var(--mainTextColor);
+    background-color: var(--mainBgColor);
+    font-family: 'Montserrat', sans-serif;
+    font-optical-sizing: auto;
+    line-height: 1;
 }
 
 button {
-  font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 a {
-  font-family: inherit;
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
+    font-family: inherit;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
 }
 
 p {
-  margin: 0;
+    margin: 0;
 }
 
 ul,
 ol,
 li {
-  padding: 0;
-  margin: 0;
-  list-style: none;
+    padding: 0;
+    margin: 0;
+    list-style: none;
 }
 
 h1, h2, h3, h4, h5 {
-  margin-top: 0;
-  margin-bottom: 0;
-  line-height: 1.25;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 1.25;
 }
 
 input[type="text"],
 input[type="email"],
 input[type="tel"],
 textarea {
-  padding-left: 1em;
+    padding-left: 1em;
 }
 
 img {
-  display: block;
+    display: block;
 }
 
 .page-main {
-  flex: 1 1 100%;
+    flex: 1 1 100%;
 
-  @media (min-width: $min-lg) {
-    padding-top: 60px;
-  }
+    @media (min-width: $min-lg) {
+        padding-top: 60px;
+    }
 
-  @media (max-width: $max-lg) {
-    padding-top: 100px;
-  }
+    @media (max-width: $max-lg) {
+        padding-top: 100px;
+    }
 }
 
 .container {
-  max-width: var(--containerWidthWithPaddings);
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: var(--containerPadding);
-  padding-left: var(--containerPadding);
-  width: 100%;
+    max-width: var(--containerWidthWithPaddings);
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: var(--containerPadding);
+    padding-left: var(--containerPadding);
+    width: 100%;
 }
 
 .base-section {
-  &__head {
-    margin-bottom: 40px;
-  }
+    &__head {
+        margin-bottom: 40px;
+    }
 
-  @media (min-width: $min-lg) {
-    padding-top: 140px;
-  }
+    @media (min-width: $min-lg) {
+        padding-top: 140px;
+    }
 
-  @media (max-width: $max-lg) {
-    padding-top: 70px;
-  }
+    @media (max-width: $max-lg) {
+        padding-top: 70px;
+    }
 }
 
 .gen-block {
-  font-weight: var(--content-font-width);
-  font-size: var(--content-font-size);
-  line-height: var(--content-line-height);
+    font-weight: var(--content-font-width);
+    font-size: var(--content-font-size);
+    line-height: var(--content-line-height);
 
-  &_on-plate {
-    background-color: rgba(47, 65, 75, 0.5);
-    border-radius: 30px;
-  }
+    &_on-plate {
+        background-color: rgba(47, 65, 75, 0.5);
+        border-radius: 30px;
+    }
 
-  &_text-centered {
-    text-align: center;
-  }
+    &_text-centered {
+        text-align: center;
+    }
 }
