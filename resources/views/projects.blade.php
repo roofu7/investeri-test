@@ -52,7 +52,7 @@
         <button class="show-main-nav page-header__open-nav"></button>
     </div>
 </header>
-
+<h1>Я сделал новые правки</h1>
 <div class="page-main index-main">
 
     <div class="intro-banner">
