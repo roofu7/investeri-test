@@ -18,5 +18,6 @@ class PageController extends Controller
         return $request->path() == '/'
             ? view('main')
             : view($request->path());
+        //
     }
 }
